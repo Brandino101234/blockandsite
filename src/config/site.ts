@@ -84,7 +84,7 @@ export const site = {
     price: '$39',
     includes: ['Hosting', 'Updates', 'Fixes'],
   },
-  responseTime: '[within X business days]',
+  responseTime: 'within 2 business days',
 } as const;
 
 /** True when a value is still an unfilled [placeholder]. */
