@@ -10,9 +10,9 @@ const steps = [
 ];
 ---
 
-<section id="process" class="section section--stone" aria-labelledby="process-title">
+<section id="process" class="section section--alt" aria-labelledby="process-title">
   <div class="container">
-    <div class="section-head">
+    <div style="--marker: var(--blue)" class="section-head">
       <h2 id="process-title">How it works</h2>
       <p>Six steps from first call to a site that keeps working.</p>
     </div>
@@ -72,20 +72,20 @@ const steps = [
   .step__block {
     width: 14px;
     height: 14px;
-    background: var(--ink);
+    border-radius: 2px;
+    background: var(--surface-2);
   }
   @media (min-width: 1040px) {
     .step__block { width: 100%; height: 12px; }
   }
   .step__block--new {
-    background: var(--signal);
-    box-shadow: inset 0 0 0 2px var(--ink);
+    background: var(--yellow);
   }
   .step__num {
     font-weight: 700;
     font-size: var(--step--1);
-    color: var(--steel);
+    color: var(--blue);
   }
-  .step h3 { font-size: 1.125rem; font-stretch: 110%; }
-  .step__body { color: var(--ink-soft); font-size: var(--step--1); line-height: 1.55; }
+  .step h3 { font-size: 1.1875rem; }
+  .step__body { color: var(--text-muted); font-size: var(--step--1); line-height: 1.55; }
 </style>

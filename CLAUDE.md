@@ -14,7 +14,7 @@ Marketing site for Block and Site, a two-partner web design studio (Brendan Nuss
 
 - Target Lighthouse 90+ on Performance, Accessibility, Best Practices, and SEO (mobile). Check before merging visual changes.
 - No UI frameworks or component libraries. Astro components + plain CSS + small vanilla TS scripts only.
-- One self-hosted font file (`public/fonts/archivo-wdth.woff2`). Don't add Google Fonts links or more font files.
+- Two self-hosted font files (`public/fonts/bricolage.woff2`, `public/fonts/figtree.woff2`). Don't add Google Fonts links or more font files.
 - Images: use real photos only, compressed WebP/AVIF, with explicit `width`/`height` and `loading="lazy"` below the fold.
 - Third-party scripts load after page load (see the HubSpot loader in `src/layouts/Base.astro`). Don't add new ones without a reason.
 
@@ -25,9 +25,13 @@ Marketing site for Block and Site, a two-partner web design studio (Brendan Nuss
 
 ## Design system
 
-Concept: Indiana limestone + blueprints. Tokens are in `src/styles/global.css`.
-- Ink `#14213D`, Paper `#F7F8FA`, Limestone `#E3E2DC`, Signal Yellow `#FFC21A` (CTAs/accents only, always with Ink text), Steel `#2F5D8A` (links/focus).
-- Archivo variable: headings 800 weight at ~118% width; body 400 at normal width.
+Theme: dark navy base; blue, red and yellow are the building blocks. Tokens are in `src/styles/global.css`.
+- Backgrounds: `#02131C` (page), `#071D29` (alternate sections), `#0B2533` / `#163445` (cards, inactive blocks), `#101112` (footer).
+- Text: `#F2F6F9`, muted `#A9BCC8`.
+- Blue `#43A4F4` = actions (buttons, links). Red `#F4434C` and yellow `#F4EB43` = block accents only (logo, hero, package stacks, process steps, section markers). Don't use them for body text or large fills.
+- Text on blue/red/yellow is always dark (`#02131C`); white text on these colors fails contrast. These colors fail on white backgrounds, so keep the site dark.
+- Form errors use the softer `#FF9A9E`, not brand red. Focus rings are yellow.
+- Bricolage Grotesque (800, -0.03em tracking) for headings; Figtree for body. Both are self-hosted in `public/fonts/`.
 - Sentence case. No all-caps labels, no arrows on buttons. Numbered markers only for real sequences (the process).
 - The block motif carries meaning (package size, process steps); don't add decorative blocks elsewhere.
 

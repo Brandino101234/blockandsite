@@ -25,7 +25,7 @@ const problems = [
 
 <section id="problems" class="section" aria-labelledby="problems-title">
   <div class="container">
-    <div class="section-head">
+    <div style="--marker: var(--blue)" class="section-head">
       <h2 id="problems-title">What we fix</h2>
       <p>We work with HVAC companies, roofers, restaurants, dentists, landscapers, and other local businesses whose websites are holding them back.</p>
     </div>
@@ -48,9 +48,8 @@ const problems = [
 <style>
   .problems {
     display: grid;
-    gap: 0;
     list-style: none;
-    border-top: 2px solid var(--ink);
+    border-top: 1px solid var(--line-strong);
   }
   @media (min-width: 720px) {
     .problems { grid-template-columns: 1fr 1fr; }
@@ -71,9 +70,9 @@ const problems = [
     place-items: center;
     width: 48px;
     height: 48px;
-    background: var(--limestone);
-    color: var(--ink);
-    border-radius: var(--radius);
+    background: var(--surface-2);
+    color: var(--blue);
+    border-radius: var(--radius-block);
   }
-  .problem p { color: var(--ink-soft); }
+  .problem p { color: var(--text-muted); }
 </style>

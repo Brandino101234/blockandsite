@@ -5,10 +5,10 @@ const a = site.mailingAddress;
 const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer on-ink">
+<footer class="site-footer">
   <div class="container site-footer__inner">
     <div class="site-footer__brand">
-      <Logo onInk />
+      <Logo />
       <p>Fast, mobile-first websites for local businesses in Carmel and Fishers, Indiana.</p>
     </div>
     <div class="site-footer__col">
@@ -35,9 +35,10 @@ const year = new Date().getFullYear();
 
 <style>
   .site-footer {
-    background: var(--ink);
-    color: var(--on-ink-muted);
+    background: var(--footer);
+    color: var(--text-muted);
     padding-block: var(--s6) var(--s4);
+    border-top: var(--border);
   }
   .site-footer__inner {
     display: grid;
@@ -48,19 +49,20 @@ const year = new Date().getFullYear();
   }
   .site-footer__brand p { margin-top: var(--s2); max-width: 32ch; }
   .site-footer__heading {
+    font-family: var(--font-body);
     font-size: var(--step--1);
-    font-stretch: 110%;
     font-weight: 700;
-    color: var(--on-ink);
+    letter-spacing: 0;
+    color: var(--text);
     margin-bottom: var(--s1);
   }
   .site-footer address { font-style: normal; }
-  .site-footer a { color: var(--on-ink); }
-  .site-footer a:focus-visible { outline-color: var(--signal); }
+  .site-footer a { color: var(--text); }
+  .site-footer a:hover { color: var(--blue); }
   .site-footer__base {
     margin-top: var(--s5);
     padding-top: var(--s3);
-    border-top: 1px solid rgb(255 255 255 / 0.14);
+    border-top: var(--border);
     font-size: var(--step--1);
   }
 </style>

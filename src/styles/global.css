@@ -1,55 +1,83 @@
 /* ============================================================
    Block and Site: design tokens + base styles
-   Concept: Indiana limestone + blueprints. One yellow block marks the next action.
+   Theme: dark navy base. Blue, red and yellow are the building blocks.
+   Blue = actions (buttons, links). Red + yellow = block accents only.
    ============================================================ */
 
 @font-face {
-  font-family: 'Archivo';
+  font-family: 'Bricolage Grotesque';
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900;
-  font-stretch: 62% 125%;
-  src: url('/fonts/archivo-wdth.woff2') format('woff2-variations'), url('/fonts/archivo-wdth.woff2') format('woff2');
+  font-weight: 200 800;
+  src: url('/fonts/bricolage.woff2') format('woff2-variations'), url('/fonts/bricolage.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* Metric-adjusted fallback to limit layout shift while Archivo loads */
 @font-face {
-  font-family: 'Archivo Fallback';
+  font-family: 'Figtree';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url('/fonts/figtree.woff2') format('woff2-variations'), url('/fonts/figtree.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Metric-adjusted fallbacks to limit layout shift while the fonts load */
+@font-face {
+  font-family: 'Figtree Fallback';
   src: local('Arial');
-  size-adjust: 101%;
-  ascent-override: 88%;
-  descent-override: 21%;
+  size-adjust: 98%;
+  ascent-override: 97%;
+  descent-override: 26%;
+}
+@font-face {
+  font-family: 'Bricolage Fallback';
+  src: local('Arial');
+  size-adjust: 96%;
+  ascent-override: 96%;
+  descent-override: 26%;
 }
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
-  /* Color */
-  --ink: #14213d;
-  --ink-soft: #3a4560;
-  --paper: #f7f8fa;
-  --limestone: #e3e2dc;
-  --limestone-deep: #cfcdc4;
-  --signal: #ffc21a;
-  --signal-deep: #f0b000;
-  --steel: #2f5d8a;
-  --success: #1e7b4f;
-  --error: #b42318;
-  --white: #ffffff;
-  --on-ink: #f7f8fa;
-  --on-ink-muted: #c3c8d4;
+  /* Surfaces (darkest to lightest) */
+  --bg: #02131c;
+  --bg-alt: #071d29;
+  --surface: #0b2533;
+  --surface-2: #163445;
+  --footer: #101112;
+  --line: #1d3d4f;
+  --line-strong: #33586c;
+
+  /* Text */
+  --text: #f2f6f9;
+  --text-muted: #a9bcc8;
+
+  /* The three building blocks */
+  --blue: #43a4f4;
+  --blue-hover: #6ab7f6;
+  --red: #f4434c;
+  --yellow: #f4eb43;
+  --on-accent: #02131c; /* text on blue / red / yellow */
+
+  /* Feedback (error is softer than brand red so it doesn't read as decoration) */
+  --error: #ff9a9e;
+  --error-bg: rgb(244 67 76 / 0.12);
+  --success: #5bd69b;
+  --focus: #f4eb43;
 
   /* Type */
-  --font: 'Archivo', 'Archivo Fallback', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --wide: 118%;
+  --font-body: 'Figtree', 'Figtree Fallback', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-head: 'Bricolage Grotesque', 'Bricolage Fallback', system-ui, sans-serif;
   --step--1: 0.9375rem;
   --step-0: 1.0625rem;
   --step-1: 1.25rem;
   --step-2: clamp(1.5rem, 1.2rem + 1.2vw, 1.875rem);
-  --step-3: clamp(1.875rem, 1.4rem + 2vw, 2.625rem);
-  --step-4: clamp(2.25rem, 1.4rem + 4vw, 4rem);
+  --step-3: clamp(2rem, 1.5rem + 2.2vw, 2.875rem);
+  --step-4: clamp(2.5rem, 1.5rem + 4.6vw, 4.5rem);
 
   /* Space: 8px modular grid */
   --s1: 0.5rem;
@@ -60,8 +88,9 @@
   --s6: 4rem;
   --s7: 6rem;
 
-  --radius: 2px;
-  --border: 1px solid var(--limestone-deep);
+  --radius: 6px;
+  --radius-block: 4px;
+  --border: 1px solid var(--line);
   --measure: 68ch;
   --container: 72rem;
   --gutter: clamp(1rem, 4vw, 2.5rem);
@@ -86,13 +115,14 @@ html {
 
 body {
   margin: 0;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
   font-size: var(--step-0);
   line-height: 1.6;
   font-weight: 400;
-  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 img,
@@ -105,23 +135,26 @@ h1,
 h2,
 h3 {
   margin: 0;
+  font-family: var(--font-head);
+  font-optical-sizing: auto;
   font-weight: 800;
-  font-stretch: var(--wide);
-  line-height: 1.1;
-  letter-spacing: -0.01em;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 
 h1 {
   font-size: var(--step-4);
-  line-height: 1.04;
+  line-height: 1.02;
 }
 h2 {
   font-size: var(--step-3);
 }
 h3 {
   font-size: var(--step-1);
+  font-weight: 700;
   line-height: 1.25;
+  letter-spacing: -0.015em;
 }
 
 p {
@@ -131,11 +164,12 @@ p {
 }
 
 a {
-  color: var(--steel);
-  text-underline-offset: 0.18em;
+  color: var(--blue);
+  text-underline-offset: 0.2em;
   text-decoration-thickness: 1px;
 }
 a:hover {
+  color: var(--blue-hover);
   text-decoration-thickness: 2px;
 }
 
@@ -146,9 +180,9 @@ ol {
 }
 
 :focus-visible {
-  outline: 3px solid var(--steel);
+  outline: 3px solid var(--focus);
   outline-offset: 3px;
-  border-radius: var(--radius);
+  border-radius: 2px;
 }
 
 .skip-link {
@@ -157,10 +191,11 @@ ol {
   top: -4rem;
   z-index: 100;
   padding: var(--s1) var(--s2);
-  background: var(--signal);
-  color: var(--ink);
+  background: var(--yellow);
+  color: var(--on-accent);
   font-weight: 700;
   text-decoration: none;
+  border-radius: var(--radius);
 }
 .skip-link:focus {
   top: var(--s2);
@@ -194,11 +229,12 @@ ol {
     padding-block: var(--s7);
   }
 }
-.section--stone {
-  background: var(--limestone);
+.section--alt {
+  background: var(--bg-alt);
+  border-block: var(--border);
 }
 
-/* Section heading with the yellow block marker */
+/* Section heading with a small block marker */
 .section-head {
   display: grid;
   gap: var(--s2);
@@ -212,14 +248,14 @@ ol {
 .section-head h2::before {
   content: '';
   flex: none;
-  width: 0.55em;
-  height: 0.55em;
-  margin-top: 0.22em;
-  background: var(--signal);
-  box-shadow: inset 0 0 0 2px var(--ink);
+  width: 0.5em;
+  height: 0.5em;
+  margin-top: 0.26em;
+  background: var(--marker, var(--blue));
+  border-radius: 3px;
 }
 .section-head p {
-  color: var(--ink-soft);
+  color: var(--text-muted);
   font-size: var(--step-1);
   line-height: 1.5;
 }
@@ -232,53 +268,45 @@ ol {
   gap: var(--s1);
   min-height: 48px;
   padding: 0.75rem 1.5rem;
-  border: 2px solid var(--ink);
+  border: 2px solid transparent;
   border-radius: var(--radius);
   font: inherit;
   font-weight: 700;
-  font-stretch: 108%;
   line-height: 1.2;
   text-decoration: none;
   cursor: pointer;
   transition:
     transform 160ms var(--ease),
-    box-shadow 160ms var(--ease),
-    background-color 160ms var(--ease);
+    background-color 160ms var(--ease),
+    border-color 160ms var(--ease);
 }
 .btn--primary {
-  background: var(--signal);
-  color: var(--ink);
-  box-shadow: 4px 4px 0 var(--ink);
+  background: var(--blue);
+  color: var(--on-accent);
 }
 .btn--primary:hover {
-  background: var(--signal-deep);
+  background: var(--blue-hover);
+  color: var(--on-accent);
   text-decoration: none;
-  transform: translate(-1px, -1px);
-  box-shadow: 5px 5px 0 var(--ink);
+  transform: translateY(-1px);
 }
 .btn--primary:active {
-  transform: translate(3px, 3px);
-  box-shadow: 1px 1px 0 var(--ink);
+  transform: translateY(1px);
 }
 .btn--secondary {
   background: transparent;
-  color: var(--ink);
+  border-color: var(--line-strong);
+  color: var(--text);
 }
 .btn--secondary:hover {
-  background: var(--white);
+  border-color: var(--blue);
+  color: var(--text);
   text-decoration: none;
 }
 .btn--small {
   min-height: 44px;
   padding: 0.5rem 1rem;
   font-size: var(--step--1);
-  box-shadow: 3px 3px 0 var(--ink);
-}
-
-/* On dark panels the primary button's hard shadow switches to limestone */
-.on-ink .btn--primary {
-  border-color: var(--signal);
-  box-shadow: 4px 4px 0 var(--limestone);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -307,6 +335,7 @@ ol {
 .prose p,
 .prose ul {
   margin-bottom: var(--s2);
+  color: var(--text-muted);
 }
 .prose ul {
   padding-left: 1.25rem;

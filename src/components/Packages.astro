@@ -2,9 +2,9 @@
 import { site } from '../config/site';
 ---
 
-<section id="packages" class="section section--stone" aria-labelledby="packages-title">
+<section id="packages" class="section section--alt" aria-labelledby="packages-title">
   <div class="container">
-    <div class="section-head">
+    <div style="--marker: var(--red)" class="section-head">
       <h2 id="packages-title">Packages</h2>
       <p>Three redesign packages, plus a monthly care plan so your site stays fast and working after launch. Every package is mobile-first, and you own your domain.</p>
     </div>
@@ -15,7 +15,7 @@ import { site } from '../config/site';
           <li class="pkg">
             <div class="pkg__stack" aria-hidden="true">
               {Array.from({ length: pkg.blocks }).map((_, i) => (
-                <span class:list={['pkg__block', { 'pkg__block--top': i === 0 }]} />
+                <span class={`pkg__block pkg__block--${['blue', 'red', 'yellow'][pkg.blocks - 1 - i]}`} />
               ))}
             </div>
             <h3 class="pkg__name">{pkg.name}</h3>
@@ -57,38 +57,37 @@ import { site } from '../config/site';
     display: flex;
     flex-direction: column;
     padding: var(--s4) var(--s3);
-    background: var(--paper);
-    border: 2px solid var(--ink);
+    background: var(--surface);
+    border: var(--border);
     border-radius: var(--radius);
   }
-  /* Block stack shows relative scope: 1, 2, or 3 blocks */
+  /* Block stack shows relative scope: each package adds a block (blue, then red, then yellow) */
   .pkg__stack {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    gap: 3px;
-    height: calc(3 * 18px + 2 * 3px);
+    gap: 4px;
+    height: calc(3 * 20px + 2 * 4px);
     margin-bottom: var(--s3);
   }
   .pkg__block {
-    width: 18px;
-    height: 18px;
-    background: var(--ink);
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
   }
-  .pkg__block--top {
-    background: var(--signal);
-    box-shadow: inset 0 0 0 2px var(--ink);
-  }
+  .pkg__block--blue { background: var(--blue); }
+  .pkg__block--red { background: var(--red); }
+  .pkg__block--yellow { background: var(--yellow); }
   .pkg__name { font-size: var(--step-2); }
   .pkg__price {
     margin-top: var(--s1);
+    font-family: var(--font-head);
     font-size: var(--step-1);
     font-weight: 700;
-    font-stretch: 110%;
   }
   .pkg__summary {
     margin-top: var(--s2);
-    color: var(--ink-soft);
+    color: var(--text-muted);
   }
   .pkg__features {
     display: grid;
@@ -107,7 +106,8 @@ import { site } from '../config/site';
     top: 0.55em;
     width: 8px;
     height: 8px;
-    background: var(--ink);
+    border-radius: 2px;
+    background: var(--blue);
   }
   .pkg__cta { margin-top: auto; width: 100%; }
 
@@ -116,8 +116,7 @@ import { site } from '../config/site';
     gap: var(--s3);
     margin-top: var(--s3);
     padding: var(--s4) var(--s3);
-    background: var(--ink);
-    color: var(--on-ink);
+    background: var(--surface-2);
     border-radius: var(--radius);
   }
   @media (min-width: 860px) {
@@ -125,11 +124,11 @@ import { site } from '../config/site';
   }
   .care__price {
     margin-top: var(--s1);
+    font-family: var(--font-head);
     font-weight: 700;
     font-size: var(--step-1);
-    font-stretch: 110%;
   }
-  .care__price span { font-weight: 400; color: var(--on-ink-muted); font-size: var(--step-0); }
+  .care__price span { font-family: var(--font-body); font-weight: 400; color: var(--text-muted); font-size: var(--step-0); }
   .care__list {
     display: flex;
     flex-wrap: wrap;
@@ -138,7 +137,7 @@ import { site } from '../config/site';
   }
   .care__list li {
     padding: 0.5rem 0.875rem;
-    border: 1px solid rgb(255 255 255 / 0.3);
+    border: 1px solid var(--line-strong);
     border-radius: var(--radius);
     font-weight: 600;
   }

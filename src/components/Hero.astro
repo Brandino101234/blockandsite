@@ -1,7 +1,7 @@
 ---
 ---
 
-<section class="hero on-ink" aria-labelledby="hero-title">
+<section class="hero" aria-labelledby="hero-title">
   <div class="container hero__inner">
     <div class="hero__copy">
       <h1 id="hero-title">Websites that get local businesses more calls.</h1>
@@ -27,7 +27,7 @@
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
             Call now
           </div>
-          <div class="blk-row" style="--i:5"><div class="blk blk--tile"></div><div class="blk blk--tile"></div></div>
+          <div class="blk-row" style="--i:5"><div class="blk blk--tile blk--yellow"></div><div class="blk blk--tile blk--red"></div></div>
           <div class="blk blk--line" style="--i:6"></div>
           <div class="blk blk--line blk--short" style="--i:7"></div>
           <div class="blk blk--footer" style="--i:8"></div>
@@ -40,13 +40,11 @@
 <style>
   .hero {
     position: relative;
-    background-color: var(--ink);
     /* faint blueprint grid on the 8px system */
     background-image:
-      linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+      linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
     background-size: 32px 32px;
-    color: var(--on-ink);
     overflow: hidden;
   }
   .hero__inner {
@@ -66,7 +64,7 @@
   }
   .hero__sub {
     margin-top: var(--s3);
-    color: var(--on-ink-muted);
+    color: var(--text-muted);
     font-size: var(--step-1);
     line-height: 1.55;
     max-width: 46ch;
@@ -79,16 +77,13 @@
     margin-top: var(--s4);
   }
   .hero__link {
-    color: var(--on-ink);
+    color: var(--text);
     font-weight: 600;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
   }
-  .hero__link:focus-visible,
-  .hero .btn:focus-visible {
-    outline-color: var(--signal);
-  }
+  .hero__link:hover { color: var(--blue); }
 
   /* ---- Phone built from blocks ---- */
   .hero__art {
@@ -99,10 +94,9 @@
     width: min(68vw, 260px);
     aspect-ratio: 9 / 17;
     padding: 12px;
-    border: 3px solid var(--limestone);
-    border-radius: 18px;
-    background: var(--ink);
-    box-shadow: 10px 10px 0 rgb(227 226 220 / 0.14);
+    border: 2px solid var(--line-strong);
+    border-radius: 22px;
+    background: var(--surface);
   }
   .phone__screen {
     display: flex;
@@ -110,8 +104,8 @@
     gap: 8px;
     height: 100%;
     padding: 10px;
-    border-radius: 8px;
-    background: var(--paper);
+    border-radius: 12px;
+    background: #f2f6f9;
     overflow: hidden;
   }
   .blk,
@@ -121,22 +115,23 @@
   }
   .blk-row .blk { animation: none; }
   .blk {
-    border-radius: var(--radius);
-    background: var(--limestone);
+    border-radius: var(--radius-block);
+    background: #d6dee4;
   }
   .blk--nav {
     display: flex;
     gap: 6px;
     padding: 6px;
-    background: var(--ink);
+    background: var(--bg);
   }
   .blk--nav span {
     width: 14px;
     height: 6px;
-    background: var(--limestone-deep);
+    border-radius: 2px;
+    background: var(--line-strong);
   }
-  .blk--nav span:first-child { width: 22px; background: var(--signal); }
-  .blk--banner { flex: 0 0 34%; background: var(--limestone-deep); }
+  .blk--nav span:first-child { width: 22px; background: var(--red); }
+  .blk--banner { flex: 0 0 34%; background: #c3ced6; }
   .blk--line { height: 10px; }
   .blk--short { width: 62%; }
   .blk--call {
@@ -146,12 +141,9 @@
     gap: 6px;
     min-height: 40px;
     margin-block: 4px;
-    background: var(--signal);
-    border: 2px solid var(--ink);
-    box-shadow: 3px 3px 0 var(--ink);
-    color: var(--ink);
-    font-weight: 800;
-    font-stretch: 112%;
+    background: var(--blue);
+    color: var(--on-accent);
+    font-weight: 700;
     font-size: 0.875rem;
   }
   .blk-row {
@@ -161,8 +153,9 @@
     flex: 1 1 auto;
     max-height: 72px;
   }
-  .blk--tile { background: var(--limestone); }
-  .blk--footer { margin-top: auto; height: 28px; background: var(--ink); }
+  .blk--yellow { background: var(--yellow); }
+  .blk--red { background: var(--red); }
+  .blk--footer { margin-top: auto; height: 28px; background: var(--bg); }
 
   @keyframes snap {
     from {
