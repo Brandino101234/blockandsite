@@ -23,7 +23,7 @@ export const site = {
   // photo: a file name in src/assets/founders/ (resized and converted to WebP at build), or null for the initials placeholder.
   founders: [
     { name: 'Brendan Nussenblatt', initials: 'BN', role: 'Co-founder', bio: '[Bio: 2–3 sentences about Brendan]', photo: 'brendan.jpg' as string | null },
-    { name: 'Tarun Bhamidipati', initials: 'TB', role: 'Co-founder', bio: '[Bio: 2–3 sentences about Tarun]', photo: null as string | null },
+    { name: 'Tarun Bhamidipati', initials: 'TB', role: 'Co-founder', bio: '[Bio: 2–3 sentences about Tarun]', photo: 'tarun.jpg' as string | null },
   ],
   packages: [
     {
