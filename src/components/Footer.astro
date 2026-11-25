@@ -1,6 +1,7 @@
 ---
 import Logo from './Logo.astro';
 import { site, isPlaceholder } from '../config/site';
+import { withBase } from '../lib/paths';
 const a = site.mailingAddress;
 const year = new Date().getFullYear();
 ---
@@ -25,7 +26,7 @@ const year = new Date().getFullYear();
     </div>
     <div class="site-footer__col">
       <h2 class="site-footer__heading">Legal</h2>
-      <p><a href="/privacy">Privacy policy</a></p>
+      <p><a href={withBase("/privacy")}>Privacy policy</a></p>
     </div>
   </div>
   <div class="container site-footer__base">

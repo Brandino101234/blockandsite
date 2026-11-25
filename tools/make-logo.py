@@ -6,7 +6,7 @@ from fontTools.pens.transformPen import TransformPen
 import uharfbuzz as hb
 
 """Regenerates public/brand logo SVGs with the wordmark outlined from Outfit 700.
-Usage: python tools/make-logo.py public/fonts/outfit.woff2 public/brand   (needs: pip install fonttools brotli uharfbuzz)
+Usage: python tools/make-logo.py src/assets/fonts/outfit.woff2 public/brand   (needs: pip install fonttools brotli uharfbuzz)
 """
 src, out = sys.argv[1], sys.argv[2]
 font = TTFont(src)

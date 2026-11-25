@@ -1,11 +1,12 @@
 ---
 import Logo from './Logo.astro';
+import { withBase } from '../lib/paths';
 const links = [
-  { href: '/#problems', label: 'What we fix' },
-  { href: '/#packages', label: 'Packages' },
-  { href: '/#work', label: 'Work' },
-  { href: '/#process', label: 'How it works' },
-  { href: '/#about', label: 'About' },
+  { href: withBase('/#problems'), label: 'What we fix' },
+  { href: withBase('/#packages'), label: 'Packages' },
+  { href: withBase('/#work'), label: 'Work' },
+  { href: withBase('/#process'), label: 'How it works' },
+  { href: withBase('/#about'), label: 'About' },
 ];
 ---
 
@@ -21,13 +22,13 @@ const links = [
         {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
       </ul>
     </nav>
-    <a class="btn btn--primary btn--small site-header__cta" href="/#contact">Get a free review</a>
+    <a class="btn btn--primary btn--small site-header__cta" href={withBase("/#contact")}>Get a free review</a>
   </div>
 </header>
 
 <!-- Phones: the CTA lives in a bar at the bottom of the screen, hidden while the form is on screen -->
 <div class="mobile-cta">
-  <a class="btn btn--primary" href="/#contact">Get a free website review</a>
+  <a class="btn btn--primary" href={withBase("/#contact")}>Get a free website review</a>
 </div>
 
 <script>

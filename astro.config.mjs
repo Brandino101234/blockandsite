@@ -4,6 +4,7 @@ import { site } from './src/config/site.ts';
 
 export default defineConfig({
   site: site.url,
+  base: site.basePath || '/',
   output: 'static',
   trailingSlash: 'ignore',
   build: { format: 'directory', inlineStylesheets: 'always' },

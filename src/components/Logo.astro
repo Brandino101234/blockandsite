@@ -1,7 +1,7 @@
 ---
-
+import { withBase } from '../lib/paths';
 ---
-<a href="/" class="logo" aria-label="Block and Site, home">
+<a href={withBase("/")} class="logo" aria-label="Block and Site, home">
   <svg class="logo__mark" viewBox="0 0 48 48" width="30" height="30" aria-hidden="true">
     <rect x="2" y="2" width="30" height="30" rx="5" fill="#43A4F4" />
     <rect x="16" y="16" width="30" height="30" rx="5" fill="#F4EB43" />

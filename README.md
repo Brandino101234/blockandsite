@@ -8,12 +8,14 @@ npm run dev       # http://localhost:4321
 npm run build     # outputs dist/
 ```
 
-## Deploy (Cloudflare Pages)
+## Deploy
 
-- Framework preset: Astro
-- Build command: `npm run build`
-- Build output directory: `dist`
-- Environment variable: `NODE_VERSION` = `22` (or newer)
+**Now: GitHub Pages.** Every push to `main` builds and deploys automatically (`.github/workflows/deploy.yml`).
+Live at https://brandino101234.github.io/blockandsite/
+
+The site runs under the `/blockandsite` subpath, set by `basePath` in `src/config/site.ts`. Always build links with `withBase()` from `src/lib/paths.ts`, never a bare `/`.
+
+**Later: own domain (Cloudflare Pages or GitHub Pages custom domain).** Set `url` to the domain and `basePath` to `''` in `src/config/site.ts`, and update `public/robots.txt`. For Cloudflare Pages: build command `npm run build`, output `dist`, env `NODE_VERSION` = `24`. (`public/_headers` is only used by Cloudflare.)
 
 ## Brand files
 

@@ -5,9 +5,10 @@
  */
 export const site = {
   name: 'Block and Site',
-  // [DOMAIN] Replace with the real domain (also update public/robots.txt).
-  // ".example" is a reserved placeholder TLD so nothing points at a real site by accident.
-  url: 'https://blockandsite.example',
+  // Hosted on GitHub Pages for now. When a custom domain is set up ([DOMAIN]):
+  // set url to it, set basePath to '', and update public/robots.txt.
+  url: 'https://brandino101234.github.io',
+  basePath: '/blockandsite',
   email: 'blockandsite@gmail.com',
   phone: '[PHONE]', // optional; leave in brackets to hide it everywhere
   mailingAddress: {
