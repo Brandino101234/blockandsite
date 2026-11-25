@@ -5,7 +5,7 @@ Marketing site for Block and Site, a two-partner web design studio (Brendan Nuss
 ## Content rules (non-negotiable)
 
 1. **Never invent facts.** No made-up statistics, years in business, client counts, awards, certifications, guarantees, response times, or prices.
-2. **Never invent reviews, testimonials, client names, logos, or results.** Before/after examples and results may only use real projects the client has approved in writing.
+2. **Never invent reviews, testimonials, client names, logos, or results.** Before/after examples and results may only use real projects the client has approved in writing. The one exception is the clearly labeled sample in `src/components/Work.astro` (Brightwater Heating & Air, a made-up business, with an on-page "Example only" note). Keep that label, never give the sample results or reviews, and replace it with real projects when you have them. Mockup sources: `tools/example-mockups/`.
 3. **Mark every unconfirmed detail with [brackets]**, e.g. `[PRICE]`, `[PACKAGE 1]`, `[Bio: ...]`. Brackets stay visible on the page until a partner confirms the real value. Search the repo for `[` before launch.
 4. Business details live in `src/config/site.ts`; HubSpot IDs live in `src/config/hubspot.ts`. Don't hardcode them in components.
 6. Internal links and asset paths go through `withBase()` / `absoluteUrl()` (`src/lib/paths.ts`). The site is served from a subpath on GitHub Pages, so a bare `/` link breaks.

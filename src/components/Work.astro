@@ -1,82 +1,220 @@
 ---
-// Placeholder examples. Replace only with real, client-approved projects and results (see CLAUDE.md).
-const examples = [
-  { business: '[Business name]', meta: '[Industry], [City]', result: '[Result: real, client-approved outcome only]' },
-  { business: '[Business name]', meta: '[Industry], [City]', result: '[Result: real, client-approved outcome only]' },
+import { Image } from 'astro:assets';
+import before from '../assets/examples/before.png';
+import foundation from '../assets/examples/foundation.png';
+import build from '../assets/examples/build.png';
+import fullbuild from '../assets/examples/fullbuild.png';
+
+// A clearly labeled sample for a made-up business (see CLAUDE.md). Replace with real, client-approved
+// projects once you have them. Mockup sources live in tools/example-mockups/.
+const afters = [
+  {
+    id: 'foundation',
+    name: 'Foundation',
+    img: foundation,
+    alt: 'Foundation redesign on a phone: tap-to-call button, list of services, photo section, and a contact form.',
+    notes: ['Tap-to-call button at the top', 'Clear list of services', 'Photo section', 'Contact form that emails the owner', 'Up to 3 pages'],
+  },
+  {
+    id: 'build',
+    name: 'Build',
+    img: build,
+    alt: 'Build redesign on a phone: quote-request form in the header, a page for each service, areas served, and a gallery.',
+    notes: ['Quote-request form right in the header', 'A page for each main service', 'Areas served, for local search', 'Gallery and about pages', 'Up to 5 pages'],
+  },
+  {
+    id: 'fullbuild',
+    name: 'Full Build',
+    img: fullbuild,
+    alt: 'Full Build redesign on a phone: 3D hero illustration, online booking with dates and time slots, a before-and-after showcase, and services.',
+    notes: ['Online booking with real time slots', '3D hero that makes the site stand out', 'Before-and-after showcase', 'Full services section and gallery', 'Up to 10 pages'],
+  },
 ];
+const imgProps = { widths: [300, 600, 780], sizes: '300px', format: 'webp' as const, quality: 78, loading: 'lazy' as const };
 ---
 
 <section id="work" class="section" aria-labelledby="work-title">
   <div class="container">
     <div style="--marker: var(--yellow)" class="section-head">
       <h2 id="work-title">Before and after</h2>
-      <p>[Intro: one sentence about the redesigns shown here]</p>
+      <p>An example redesign for a local HVAC company, shown the way their customers see it: on a phone. Pick a package to compare, and scroll inside each phone to see the whole page.</p>
     </div>
-    <ul class="work" role="list">
-      {
-        examples.map((ex) => (
-          <li class="example">
-            <div class="example__pair">
-              <figure class="shot shot--before">
-                <div class="shot__frame"><span>[Before screenshot]</span></div>
-                <figcaption>Before</figcaption>
-              </figure>
-              <figure class="shot shot--after">
-                <div class="shot__frame"><span>[After screenshot]</span></div>
-                <figcaption>After</figcaption>
-              </figure>
+
+    <div class="ex">
+      <figure class="ex__col">
+        <figcaption class="ex__head"><span class="ex__tag ex__tag--before">Before</span> The original site</figcaption>
+        <div class="ex__phone">
+          <div class="ex__screen" tabindex="0" role="region" aria-label="Before: the original site. Scroll to see the whole page.">
+            <Image src={before} alt="The original site on a phone: a desktop layout shrunk down so the text is tiny, with the phone number buried at the bottom and no contact form." {...imgProps} />
+          </div>
+        </div>
+        <ul class="ex__notes ex__notes--before">
+          <li>Desktop layout squeezed onto a phone, so customers pinch and zoom</li>
+          <li>Phone number buried in small text at the bottom</li>
+          <li>No contact form, just an email address</li>
+        </ul>
+      </figure>
+
+      <div class="ex__col">
+        <div class="ex__head">
+          <span class="ex__tag ex__tag--after">After</span>
+          <div class="ex__tabs" role="tablist" aria-label="Redesign package">
+            {afters.map((a, i) => (
+              <button
+                type="button"
+                role="tab"
+                id={`ex-tab-${a.id}`}
+                aria-controls={`ex-panel-${a.id}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? 0 : -1}
+                class="ex__tab"
+              >
+                {a.name}
+              </button>
+            ))}
+          </div>
+        </div>
+        {afters.map((a, i) => (
+          <div class="ex__panel" role="tabpanel" id={`ex-panel-${a.id}`} aria-labelledby={`ex-tab-${a.id}`} hidden={i !== 0}>
+            <div class="ex__phone">
+              <div class="ex__screen" tabindex="0" role="region" aria-label={`${a.name} redesign. Scroll to see the whole page.`}>
+                <Image src={a.img} alt={a.alt} {...imgProps} />
+              </div>
             </div>
-            <h3>{ex.business}</h3>
-            <p class="example__meta">{ex.meta}</p>
-            <p class="example__result">{ex.result}</p>
-          </li>
-        ))
-      }
-    </ul>
+            <ul class="ex__notes">
+              {a.notes.map((n) => <li>{n}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <p class="ex__disclaimer">Example only: Brightwater Heating &amp; Air is a made-up business we use to show what each package includes. It is not a client.</p>
   </div>
 </section>
 
+<script>
+  // Accessible tabs: click, or arrow keys / Home / End to move between packages.
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.ex__tab'));
+  const select = (tab: HTMLButtonElement, focus = true) => {
+    for (const t of tabs) {
+      const on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      const panel = document.getElementById(t.getAttribute('aria-controls')!);
+      if (panel) panel.hidden = !on;
+    }
+    if (focus) tab.focus();
+  };
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => select(tab, false));
+    tab.addEventListener('keydown', (e) => {
+      const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+      if (next === undefined) return;
+      e.preventDefault();
+      select(tabs[(next + tabs.length) % tabs.length]);
+    });
+  });
+</script>
+
 <style>
-  .work {
+  .ex {
     display: grid;
     gap: var(--s5);
-    list-style: none;
   }
-  @media (min-width: 900px) {
-    .work { grid-template-columns: 1fr 1fr; gap: var(--s4); }
+  @media (min-width: 820px) {
+    .ex { grid-template-columns: 1fr 1fr; gap: var(--s4); align-items: start; }
   }
-  .example__pair {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--s1);
-    margin-bottom: var(--s3);
-  }
-  .shot { margin: 0; }
-  .shot__frame {
-    display: grid;
-    place-items: center;
-    aspect-ratio: 4 / 5;
-    padding: var(--s2);
-    border-radius: var(--radius-block);
-    text-align: center;
-    font-size: var(--step--1);
-  }
-  .shot--before .shot__frame {
-    background: repeating-linear-gradient(135deg, var(--surface) 0 10px, var(--bg-alt) 10px 20px);
-    border: var(--border);
+  .ex__col { margin: 0; display: grid; justify-items: center; gap: var(--s3); }
+  .ex__panel { display: grid; justify-items: center; gap: var(--s3); }
+  .ex__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s1) var(--s2);
+    min-height: 48px;
+    font-weight: 600;
     color: var(--text-muted);
   }
-  .shot--after .shot__frame {
-    background: var(--surface);
-    border: 1px solid var(--line-strong);
-    box-shadow: inset 0 6px 0 var(--blue);
-    color: var(--text);
-  }
-  .shot figcaption {
-    margin-top: var(--s1);
+  .ex__tag {
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--radius-block);
+    font-size: var(--step--1);
     font-weight: 700;
+    color: var(--on-accent);
+  }
+  .ex__tag--before { background: var(--red); }
+  .ex__tag--after { background: var(--blue); }
+
+  .ex__tabs {
+    display: inline-flex;
+    padding: 4px;
+    gap: 4px;
+    border: var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .ex__tab {
+    min-height: 40px;
+    padding: 0.375rem 0.875rem;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-muted);
+    font: inherit;
+    font-weight: 600;
+    font-size: var(--step--1);
+    cursor: pointer;
+  }
+  .ex__tab:hover { color: var(--text); }
+  .ex__tab[aria-selected='true'] { background: var(--blue); color: var(--on-accent); }
+
+  .ex__phone {
+    width: min(100%, 300px);
+    padding: 10px;
+    border: 2px solid var(--line-strong);
+    border-radius: 30px;
+    background: var(--surface);
+  }
+  .ex__screen {
+    height: 560px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-radius: 20px;
+    background: #fff;
+    scrollbar-width: thin;
+  }
+  @media (max-width: 819px) {
+    .ex__screen { height: 440px; }
+    .ex { gap: var(--s4); }
+  }
+  .ex__screen :global(img) { width: 100%; height: auto; display: block; }
+
+  .ex__notes {
+    width: min(100%, 300px);
+    display: grid;
+    gap: var(--s1);
+    list-style: none;
     font-size: var(--step--1);
   }
-  .example__meta { color: var(--text-muted); margin-top: 0.25rem; }
-  .example__result { margin-top: var(--s1); }
+  .ex__notes li { position: relative; padding-left: 1.25rem; }
+  .ex__notes li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--blue);
+  }
+  .ex__notes--before li { color: var(--text-muted); }
+  .ex__notes--before li::before { background: var(--red); }
+  .ex__disclaimer {
+    margin: var(--s4) auto 0;
+    text-align: center;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
 </style>
