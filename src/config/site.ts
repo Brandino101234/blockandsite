@@ -22,8 +22,8 @@ export const site = {
     'Block and Site redesigns websites for local small businesses in Carmel and Fishers, Indiana: fast, mobile-first sites built to get calls and bookings.',
   // photo: a file name in src/assets/founders/ (resized and converted to WebP at build), or null for the initials placeholder.
   founders: [
-    { name: 'Brendan Nussenblatt', initials: 'BN', role: 'Co-founder', bio: '[Bio: 2–3 sentences about Brendan]', photo: 'brendan.jpg' as string | null },
-    { name: 'Tarun Bhamidipati', initials: 'TB', role: 'Co-founder', bio: '[Bio: 2–3 sentences about Tarun]', photo: 'tarun.jpg' as string | null },
+    { name: 'Brendan Nussenblatt', initials: 'BN', role: 'Co-founder', bio: 'Brendan designs and builds every Block and Site website, with a focus on UI/UX: making sure a site is easy to use on a phone and makes it obvious how to call or book. [One line of background: school, program, or a past project.] [One line connecting Brendan to Carmel/Fishers.]', photo: 'brendan.jpg' as string | null },
+    { name: 'Tarun Bhamidipati', initials: 'TB', role: 'Co-founder', bio: 'Tarun leads client relationships, from the first discovery call through launch, and makes sure every project stays on schedule and the site does what the business needs. [One line of background.] [One line connecting Tarun to Carmel/Fishers.]', photo: 'tarun.jpg' as string | null },
   ],
   packages: [
     {
