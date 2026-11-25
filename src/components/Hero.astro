@@ -15,27 +15,65 @@
       </div>
     </div>
 
-    <!-- Signature visual: a phone-sized site assembling from blocks. The yellow block is the call button. -->
+    <!-- Signature visual: a phone-sized site built from blocks, shown in 3D. Blocks float off the screen at
+         different depths; three cubes (the logo colors) orbit it. Pure CSS 3D, tilts with the pointer. -->
     <div class="hero__art" aria-hidden="true">
+      <div class="rig-sway">
+      <div class="rig">
+      <div class="cube" style="--s:46px; --x:-20%; --y:10%; --z:90px; --c:var(--blue); --d:16s; --fd:4.5s"><div class="cube__spin"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div class="cube" style="--s:32px; --x:92%; --y:2%; --z:60px; --c:var(--yellow); --d:12s; --fd:3.8s"><div class="cube__spin"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div class="cube" style="--s:40px; --x:86%; --y:72%; --z:120px; --c:var(--red); --d:20s; --fd:5.2s"><div class="cube__spin"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
       <div class="phone">
         <div class="phone__screen">
-          <div class="blk blk--nav" style="--i:0"><span></span><span></span><span></span></div>
-          <div class="blk blk--banner" style="--i:1"></div>
-          <div class="blk blk--line" style="--i:2"></div>
-          <div class="blk blk--line blk--short" style="--i:3"></div>
-          <div class="blk blk--call" style="--i:4">
+          <div class="blk blk--nav" style="--i:0; --z:18px"><span></span><span></span><span></span></div>
+          <div class="blk blk--banner" style="--i:1; --z:8px"></div>
+          <div class="blk blk--line" style="--i:2; --z:4px"></div>
+          <div class="blk blk--line blk--short" style="--i:3; --z:4px"></div>
+          <div class="blk blk--call" style="--i:4; --z:46px">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
             Call now
           </div>
-          <div class="blk-row" style="--i:5"><div class="blk blk--tile blk--yellow"></div><div class="blk blk--tile blk--red"></div></div>
-          <div class="blk blk--line" style="--i:6"></div>
-          <div class="blk blk--line blk--short" style="--i:7"></div>
-          <div class="blk blk--footer" style="--i:8"></div>
+          <div class="blk-row" style="--i:5; --z:30px"><div class="blk blk--tile blk--yellow"></div><div class="blk blk--tile blk--red"></div></div>
+          <div class="blk blk--line" style="--i:6; --z:4px"></div>
+          <div class="blk blk--line blk--short" style="--i:7; --z:4px"></div>
+          <div class="blk blk--footer" style="--i:8; --z:12px"></div>
         </div>
+      </div>
+      </div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  // Tilt the 3D scene toward the pointer (mouse/trackpad only; skipped for reduced motion), and pause
+  // the idle animations while the hero is off screen.
+  const hero = document.querySelector<HTMLElement>('.hero');
+  const rig = document.querySelector<HTMLElement>('.rig');
+  if (hero && rig) {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduced && matchMedia('(pointer: fine)').matches) {
+      let frame = 0;
+      hero.addEventListener('pointermove', (e) => {
+        const r = hero.getBoundingClientRect();
+        const dx = (e.clientX - r.left) / r.width - 0.5;
+        const dy = (e.clientY - r.top) / r.height - 0.5;
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => {
+          rig.style.setProperty('--ry', `${(dx * 24).toFixed(2)}deg`);
+          rig.style.setProperty('--rx', `${(-dy * 16).toFixed(2)}deg`);
+        });
+      });
+      hero.addEventListener('pointerleave', () => {
+        rig.style.setProperty('--ry', '0deg');
+        rig.style.setProperty('--rx', '0deg');
+      });
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => hero.classList.toggle('is-offscreen', !entry.isIntersecting)).observe(hero);
+    }
+  }
+</script>
 
 <style>
   .hero {
@@ -91,6 +129,8 @@
     justify-content: center;
   }
   .phone {
+    position: relative;
+    transform-style: preserve-3d;
     width: min(68vw, 260px);
     aspect-ratio: 9 / 17;
     padding: 12px;
@@ -106,7 +146,7 @@
     padding: 10px;
     border-radius: 12px;
     background: #f5f5f5;
-    overflow: hidden;
+    transform-style: preserve-3d;
   }
   .blk,
   .blk-row {
@@ -156,6 +196,86 @@
   .blk--yellow { background: var(--yellow); }
   .blk--red { background: var(--red); }
   .blk--footer { margin-top: auto; height: 28px; background: var(--bg); }
+
+  /* ---- 3D scene ---- */
+  .hero__art {
+    perspective: 1100px;
+    perspective-origin: 50% 40%;
+  }
+  .rig-sway {
+    transform-style: preserve-3d;
+    animation: sway 9s ease-in-out infinite alternate;
+  }
+  .rig {
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(calc(6deg + var(--rx, 0deg))) rotateY(calc(-18deg + var(--ry, 0deg)));
+    transition: transform 500ms var(--ease);
+  }
+  /* Blocks lift off the screen to their own depth (individual translate composes with the snap animation) */
+  .blk,
+  .blk-row {
+    translate: 0 0 var(--z, 0px);
+    transform-style: preserve-3d;
+  }
+  .blk--nav,
+  .blk--call,
+  .blk-row .blk {
+    box-shadow: 0 12px 20px rgb(0 0 0 / 0.28);
+  }
+
+  .cube {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--s);
+    height: var(--s);
+    transform-style: preserve-3d;
+    transform: translateZ(var(--z));
+    animation: float var(--fd) ease-in-out infinite alternate;
+  }
+  .cube__spin {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: spin var(--d) linear infinite;
+  }
+  .cube__spin i {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    background: var(--c);
+    backface-visibility: hidden;
+  }
+  .cube__spin i:nth-child(1) { transform: translateZ(calc(var(--s) / 2)); }
+  .cube__spin i:nth-child(2) { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
+  .cube__spin i:nth-child(3) { transform: rotateY(90deg) translateZ(calc(var(--s) / 2)); }
+  .cube__spin i:nth-child(4) { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
+  .cube__spin i:nth-child(5) { transform: rotateX(90deg) translateZ(calc(var(--s) / 2)); }
+  .cube__spin i:nth-child(6) { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); }
+  /* Simple shading so the cubes read as solid: sides darker, top/bottom lighter */
+  .cube__spin i:nth-child(3),
+  .cube__spin i:nth-child(4) { background-image: linear-gradient(rgb(0 0 0 / 0.22), rgb(0 0 0 / 0.22)); }
+  .cube__spin i:nth-child(5),
+  .cube__spin i:nth-child(6) { background-image: linear-gradient(rgb(255 255 255 / 0.25), rgb(255 255 255 / 0.25)); }
+
+  .hero.is-offscreen .rig-sway,
+  .hero.is-offscreen .cube,
+  .hero.is-offscreen .cube__spin { animation-play-state: paused; }
+
+  @keyframes sway {
+    from { transform: rotateY(-7deg) translateY(0); }
+    to { transform: rotateY(7deg) translateY(-6px); }
+  }
+  @keyframes spin {
+    from { transform: rotateX(-24deg) rotateY(0deg); }
+    to { transform: rotateX(-24deg) rotateY(360deg); }
+  }
+  @keyframes float {
+    from { transform: translateZ(var(--z)) translateY(-8px); }
+    to { transform: translateZ(var(--z)) translateY(8px); }
+  }
 
   @keyframes snap {
     from {
