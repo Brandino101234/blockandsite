@@ -32,6 +32,44 @@ import { site } from '../config/site';
       }
     </ul>
 
+    <div class="compare">
+      <h3 class="compare__title">Compare packages</h3>
+      <div class="compare__scroll">
+        <table class="compare__table">
+          <caption class="visually-hidden">What each package includes</caption>
+          <thead>
+            <tr>
+              <th scope="col"><span class="visually-hidden">Feature</span></th>
+              {site.packages.map((pkg) => (
+                <th scope="col">
+                  <span class="compare__pkg">{pkg.name}</span>
+                  <span class="compare__price">{pkg.price}</span>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {site.comparison.map((row) => (
+              <tr>
+                <th scope="row">{row.feature}</th>
+                {row.values.map((v) => (
+                  <td>
+                    {v === true ? (
+                      <><span class="compare__yes" aria-hidden="true" /><span class="visually-hidden">Included</span></>
+                    ) : v === false ? (
+                      <><span class="compare__no" aria-hidden="true">–</span><span class="visually-hidden">Not included</span></>
+                    ) : (
+                      v
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="care">
       <div class="care__head">
         <h3>Monthly {site.carePlan.name.toLowerCase()}</h3>
@@ -111,6 +149,74 @@ import { site } from '../config/site';
     background: var(--blue);
   }
   .pkg__cta { margin-top: auto; width: 100%; }
+
+  /* ---- Comparison table ---- */
+  .compare {
+    margin-top: var(--s5);
+  }
+  .compare__title {
+    font-size: var(--step-2);
+    margin-bottom: var(--s3);
+  }
+  .compare__scroll {
+    overflow-x: auto;
+    border: var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .compare__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--step--1);
+  }
+  .compare__table { table-layout: fixed; }
+  .compare__table thead th:first-child { width: 40%; }
+  @media (max-width: 599px) {
+    .compare__table { font-size: 0.875rem; }
+    .compare__table thead th:first-child { width: 30%; }
+    .compare__table thead th { padding-inline: 0.125rem; }
+    .compare__table th,
+    .compare__table td { padding: 0.625rem 0.25rem; }
+    .compare__table tbody th { padding-left: 0.625rem; }
+    .compare__pkg { font-size: 0.8125rem; line-height: 1.2; }
+    .compare__price { font-size: 0.8125rem; }
+  }
+  .compare__table th,
+  .compare__table td {
+    padding: 0.75rem var(--s2);
+    border-bottom: var(--border);
+    text-align: center;
+    vertical-align: middle;
+  }
+  .compare__table tbody tr:last-child > * { border-bottom: 0; }
+  .compare__table tbody th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .compare__table thead th {
+    padding-block: var(--s2);
+    background: var(--surface-2);
+  }
+  .compare__pkg {
+    display: block;
+    font-weight: 700;
+    font-size: var(--step-0);
+  }
+  .compare__price {
+    display: block;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .compare__table td { color: var(--text); font-weight: 600; }
+  .compare__yes {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    background: var(--blue);
+  }
+  .compare__no { color: var(--text-muted); font-weight: 400; }
 
   .care {
     display: grid;
