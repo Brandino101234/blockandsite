@@ -19,7 +19,7 @@ import { site } from '../config/site';
               ))}
             </div>
             <h3 class="pkg__name">{pkg.name}</h3>
-            <p class="pkg__price">{pkg.price}</p>
+            <p class="pkg__price">{pkg.price} <span>one-time</span></p>
             <p class="pkg__summary">{pkg.summary}</p>
             <ul class="pkg__features">
               {pkg.features.map((f) => <li>{f}</li>)}
@@ -34,7 +34,7 @@ import { site } from '../config/site';
 
     <div class="care">
       <div class="care__head">
-        <h3>Monthly care plan: {site.carePlan.name}</h3>
+        <h3>Monthly {site.carePlan.name.toLowerCase()}</h3>
         <p class="care__price">{site.carePlan.price} <span>per month</span></p>
       </div>
       <ul class="care__list" role="list">
@@ -85,6 +85,7 @@ import { site } from '../config/site';
     font-size: var(--step-1);
     font-weight: 700;
   }
+  .pkg__price span { font-family: var(--font-body); font-weight: 400; color: var(--text-muted); font-size: var(--step-0); }
   .pkg__summary {
     margin-top: var(--s2);
     color: var(--text-muted);
