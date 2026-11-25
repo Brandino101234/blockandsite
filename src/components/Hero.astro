@@ -260,6 +260,43 @@
   .cube__spin i:nth-child(5),
   .cube__spin i:nth-child(6) { background-image: linear-gradient(rgb(255 255 255 / 0.25), rgb(255 255 255 / 0.25)); }
 
+  /* Narrow screens: lay the phone back like it's on a table so the blocks rise toward the viewer.
+     Same 3D idea at roughly half the height. Transforms don't change layout size, so the art box
+     gets a fixed height and the scene is centered inside it. */
+  @media (max-width: 899px) {
+    .hero__inner {
+      gap: var(--s2);
+      padding-block: var(--s5) var(--s3);
+    }
+    .hero__art {
+      height: 240px;
+      margin-top: var(--s3);
+      align-items: center;
+      perspective: 800px;
+      perspective-origin: 50% 20%;
+    }
+    .phone {
+      width: 150px;
+      padding: 8px;
+      border-radius: 16px;
+    }
+    .phone__screen {
+      gap: 5px;
+      padding: 7px;
+    }
+    .blk--call {
+      min-height: 26px;
+      font-size: 0.6875rem;
+    }
+    .blk--call svg { width: 11px; height: 11px; }
+    .blk-row { flex: 0 0 34px; gap: 5px; }
+    .hero__actions { gap: var(--s2) var(--s3); margin-top: var(--s3); }
+    .rig {
+      transform: rotateX(calc(52deg + var(--rx, 0deg))) rotateZ(-30deg) rotateY(var(--ry, 0deg));
+    }
+    .cube { --s: 26px !important; }
+  }
+
   .hero.is-offscreen .rig-sway,
   .hero.is-offscreen .cube,
   .hero.is-offscreen .cube__spin { animation-play-state: paused; }

@@ -27,7 +27,7 @@ const links = [
 </header>
 
 <!-- Phones: the CTA lives in a bar at the bottom of the screen, hidden while the form is on screen -->
-<div class="mobile-cta">
+<div class="mobile-cta is-hidden">
   <a class="btn btn--primary" href={withBase("/#contact")}>Get a free website review</a>
 </div>
 
@@ -35,8 +35,8 @@ const links = [
   const toggle = document.querySelector<HTMLButtonElement>('.site-nav__toggle');
   const list = document.getElementById('site-nav-list');
   const bar = document.querySelector<HTMLElement>('.mobile-cta');
-  // Hide the bar while the contact form or footer is on screen.
-  const targets = [document.getElementById('contact'), document.querySelector('.site-footer')].filter(Boolean) as Element[];
+  // Hide the bar while the hero (which has its own button), the contact form, or the footer is on screen.
+  const targets = [document.querySelector('.hero'), document.getElementById('contact'), document.querySelector('.site-footer')].filter(Boolean) as Element[];
   if (bar && targets.length && 'IntersectionObserver' in window) {
     const visible = new Set<Element>();
     const io = new IntersectionObserver((entries) => {
