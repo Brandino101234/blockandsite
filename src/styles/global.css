@@ -1,42 +1,25 @@
 /* ============================================================
    Block and Site: design tokens + base styles
-   Theme: dark navy base. Blue, red and yellow are the building blocks.
+   Theme: pure black base. Blue, red and yellow are the building blocks.
    Blue = actions (buttons, links). Red + yellow = block accents only.
    ============================================================ */
 
 @font-face {
-  font-family: 'Bricolage Grotesque';
+  font-family: 'Outfit';
   font-style: normal;
   font-display: swap;
-  font-weight: 200 800;
-  src: url('/fonts/bricolage.woff2') format('woff2-variations'), url('/fonts/bricolage.woff2') format('woff2');
+  font-weight: 100 900;
+  src: url('/fonts/outfit.woff2') format('woff2-variations'), url('/fonts/outfit.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+/* Metric-adjusted fallback to limit layout shift while Outfit loads */
 @font-face {
-  font-family: 'Figtree';
-  font-style: normal;
-  font-display: swap;
-  font-weight: 300 900;
-  src: url('/fonts/figtree.woff2') format('woff2-variations'), url('/fonts/figtree.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* Metric-adjusted fallbacks to limit layout shift while the fonts load */
-@font-face {
-  font-family: 'Figtree Fallback';
+  font-family: 'Outfit Fallback';
   src: local('Arial');
-  size-adjust: 98%;
-  ascent-override: 97%;
-  descent-override: 26%;
-}
-@font-face {
-  font-family: 'Bricolage Fallback';
-  src: local('Arial');
-  size-adjust: 96%;
-  ascent-override: 96%;
+  size-adjust: 100%;
+  ascent-override: 100%;
   descent-override: 26%;
 }
 
@@ -44,24 +27,24 @@
   color-scheme: dark;
 
   /* Surfaces (darkest to lightest) */
-  --bg: #02131c;
-  --bg-alt: #071d29;
-  --surface: #0b2533;
-  --surface-2: #163445;
-  --footer: #101112;
-  --line: #1d3d4f;
-  --line-strong: #33586c;
+  --bg: #000000;
+  --bg-alt: #0b0b0b;
+  --surface: #141414;
+  --surface-2: #222222;
+  --footer: #0b0b0b;
+  --line: #262626;
+  --line-strong: #3f3f3f;
 
   /* Text */
-  --text: #f2f6f9;
-  --text-muted: #a9bcc8;
+  --text: #ffffff;
+  --text-muted: #b5b5b5;
 
   /* The three building blocks */
   --blue: #43a4f4;
   --blue-hover: #6ab7f6;
   --red: #f4434c;
   --yellow: #f4eb43;
-  --on-accent: #02131c; /* text on blue / red / yellow */
+  --on-accent: #000000; /* text on blue / red / yellow */
 
   /* Feedback (error is softer than brand red so it doesn't read as decoration) */
   --error: #ff9a9e;
@@ -70,8 +53,8 @@
   --focus: #f4eb43;
 
   /* Type */
-  --font-body: 'Figtree', 'Figtree Fallback', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-head: 'Bricolage Grotesque', 'Bricolage Fallback', system-ui, sans-serif;
+  --font-body: 'Outfit', 'Outfit Fallback', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-head: var(--font-body);
   --step--1: 0.9375rem;
   --step-0: 1.0625rem;
   --step-1: 1.25rem;
@@ -136,8 +119,7 @@ h2,
 h3 {
   margin: 0;
   font-family: var(--font-head);
-  font-optical-sizing: auto;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.03em;
   text-wrap: balance;
@@ -152,9 +134,9 @@ h2 {
 }
 h3 {
   font-size: var(--step-1);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.25;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
 }
 
 p {
