@@ -1,0 +1,77 @@
+---
+import { site } from '../config/site';
+---
+
+<section id="about" class="section" aria-labelledby="about-title">
+  <div class="container about">
+    <div class="section-head about__head">
+      <h2 id="about-title">Who you’ll work with</h2>
+      <p>Block and Site is run by two partners, Brendan and Tarun. The people you talk to on the first call are the people who build your site.</p>
+    </div>
+    <ul class="founders" role="list">
+      {
+        site.founders.map((f) => (
+          <li class="founder">
+            {f.photo ? (
+              <img class="founder__photo" src={f.photo} alt={`Photo of ${f.name}`} width="480" height="600" loading="lazy" decoding="async" />
+            ) : (
+              <div class="founder__photo founder__photo--placeholder" role="img" aria-label={`[Photo of ${f.name}]`}>
+                <span class="founder__initials">{f.initials}</span>
+                <span class="founder__note">[Photo]</span>
+              </div>
+            )}
+            <h3>{f.name}</h3>
+            <p class="founder__role">{f.role}</p>
+            <p class="founder__bio">{f.bio}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .about {
+    display: grid;
+    gap: var(--s4);
+  }
+  @media (min-width: 900px) {
+    .about { grid-template-columns: 1fr 1.6fr; gap: var(--s6); align-items: start; }
+    .about__head { margin-bottom: 0; }
+  }
+  .founders {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: var(--s4);
+    list-style: none;
+  }
+  .founder__photo {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin-bottom: var(--s2);
+  }
+  .founder__photo--placeholder {
+    position: relative;
+    display: grid;
+    place-items: center;
+    background: var(--limestone);
+    border: 2px solid var(--ink);
+  }
+  .founder__initials {
+    font-size: var(--step-4);
+    font-weight: 800;
+    font-stretch: 125%;
+    color: var(--ink);
+  }
+  .founder__note {
+    position: absolute;
+    left: var(--s2);
+    bottom: var(--s2);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  .founder__role { color: var(--steel); font-weight: 600; margin-top: 0.25rem; }
+  .founder__bio { margin-top: var(--s1); color: var(--ink-soft); }
+</style>

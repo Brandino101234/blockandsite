@@ -1,0 +1,316 @@
+/* ============================================================
+   Block and Site: design tokens + base styles
+   Concept: Indiana limestone + blueprints. One yellow block marks the next action.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  src: url('/fonts/archivo-wdth.woff2') format('woff2-variations'), url('/fonts/archivo-wdth.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Metric-adjusted fallback to limit layout shift while Archivo loads */
+@font-face {
+  font-family: 'Archivo Fallback';
+  src: local('Arial');
+  size-adjust: 101%;
+  ascent-override: 88%;
+  descent-override: 21%;
+}
+
+:root {
+  color-scheme: light;
+
+  /* Color */
+  --ink: #14213d;
+  --ink-soft: #3a4560;
+  --paper: #f7f8fa;
+  --limestone: #e3e2dc;
+  --limestone-deep: #cfcdc4;
+  --signal: #ffc21a;
+  --signal-deep: #f0b000;
+  --steel: #2f5d8a;
+  --success: #1e7b4f;
+  --error: #b42318;
+  --white: #ffffff;
+  --on-ink: #f7f8fa;
+  --on-ink-muted: #c3c8d4;
+
+  /* Type */
+  --font: 'Archivo', 'Archivo Fallback', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --wide: 118%;
+  --step--1: 0.9375rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.25rem;
+  --step-2: clamp(1.5rem, 1.2rem + 1.2vw, 1.875rem);
+  --step-3: clamp(1.875rem, 1.4rem + 2vw, 2.625rem);
+  --step-4: clamp(2.25rem, 1.4rem + 4vw, 4rem);
+
+  /* Space: 8px modular grid */
+  --s1: 0.5rem;
+  --s2: 1rem;
+  --s3: 1.5rem;
+  --s4: 2rem;
+  --s5: 3rem;
+  --s6: 4rem;
+  --s7: 6rem;
+
+  --radius: 2px;
+  --border: 1px solid var(--limestone-deep);
+  --measure: 68ch;
+  --container: 72rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 800;
+  font-stretch: var(--wide);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--step-4);
+  line-height: 1.04;
+}
+h2 {
+  font-size: var(--step-3);
+}
+h3 {
+  font-size: var(--step-1);
+  line-height: 1.25;
+}
+
+p {
+  margin: 0;
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--steel);
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--steel);
+  outline-offset: 3px;
+  border-radius: var(--radius);
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--s2);
+  top: -4rem;
+  z-index: 100;
+  padding: var(--s1) var(--s2);
+  background: var(--signal);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: var(--s2);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Layout ---------- */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: var(--s6);
+}
+@media (min-width: 900px) {
+  .section {
+    padding-block: var(--s7);
+  }
+}
+.section--stone {
+  background: var(--limestone);
+}
+
+/* Section heading with the yellow block marker */
+.section-head {
+  display: grid;
+  gap: var(--s2);
+  margin-bottom: var(--s5);
+}
+.section-head h2 {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+.section-head h2::before {
+  content: '';
+  flex: none;
+  width: 0.55em;
+  height: 0.55em;
+  margin-top: 0.22em;
+  background: var(--signal);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.section-head p {
+  color: var(--ink-soft);
+  font-size: var(--step-1);
+  line-height: 1.5;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s1);
+  min-height: 48px;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  font: inherit;
+  font-weight: 700;
+  font-stretch: 108%;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 160ms var(--ease),
+    box-shadow 160ms var(--ease),
+    background-color 160ms var(--ease);
+}
+.btn--primary {
+  background: var(--signal);
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.btn--primary:hover {
+  background: var(--signal-deep);
+  text-decoration: none;
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.btn--primary:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+.btn--secondary {
+  background: transparent;
+  color: var(--ink);
+}
+.btn--secondary:hover {
+  background: var(--white);
+  text-decoration: none;
+}
+.btn--small {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  font-size: var(--step--1);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+/* On dark panels the primary button's hard shadow switches to limestone */
+.on-ink .btn--primary {
+  border-color: var(--signal);
+  box-shadow: 4px 4px 0 var(--limestone);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Prose (privacy page) */
+.prose {
+  max-width: var(--measure);
+}
+.prose h2 {
+  font-size: var(--step-2);
+  margin-top: var(--s5);
+  margin-bottom: var(--s2);
+}
+.prose p,
+.prose ul {
+  margin-bottom: var(--s2);
+}
+.prose ul {
+  padding-left: 1.25rem;
+}
+.prose li {
+  margin-bottom: var(--s1);
+}

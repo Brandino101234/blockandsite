@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../config/site';
+---
+
+<Base
+  title="Privacy policy | Block and Site"
+  description="What information Block and Site collects through this website, how it is stored in HubSpot, and how to ask us to delete it. We never sell your information."
+>
+  <Header />
+  <main id="main" class="section">
+    <div class="container">
+      <article class="prose">
+        <h1>Privacy policy</h1>
+        <p class="effective">Effective date: [EFFECTIVE DATE]</p>
+
+        <p>
+          This policy explains what information {site.name} collects through this website and what we do with it. The
+          short version: we only collect what you give us in our contact form, plus basic information about which pages
+          you visit. We store it in HubSpot, use it to reply to you, and never sell it.
+        </p>
+
+        <h2>Information you give us</h2>
+        <p>When you fill out our contact form, we collect:</p>
+        <ul>
+          <li>First and last name</li>
+          <li>Email address</li>
+          <li>Phone number (if you provide it)</li>
+          <li>Business name</li>
+          <li>Current website address (if you provide it)</li>
+          <li>Your message (if you write one)</li>
+        </ul>
+        <p>We don’t ask for payment details, passwords, or any other sensitive information on this website.</p>
+
+        <h2>Pages you visit (cookies)</h2>
+        <p>
+          This website uses HubSpot’s tracking code, which sets cookies in your browser. These cookies let us see which
+          pages of our site you viewed and, if you fill out the contact form, connect those page views to your
+          submission. HubSpot may also record technical details such as your browser type, device, and approximate
+          location based on your IP address.
+        </p>
+        <p>
+          You can block or delete cookies in your browser settings. The site will still work, and you can still contact
+          us.
+        </p>
+
+        <h2>How we use your information</h2>
+        <ul>
+          <li>To reply to your request and send you a website review</li>
+          <li>To follow up about our services if you’ve asked us to work with you</li>
+          <li>To understand which pages on our site are useful</li>
+        </ul>
+
+        <h2>Where it’s stored</h2>
+        <p>
+          Contact form submissions and page-view information are stored in HubSpot, the customer relationship management
+          (CRM) service we use. HubSpot processes this information on our behalf. You can read
+          <a href="https://legal.hubspot.com/privacy-policy" rel="noopener">HubSpot’s privacy policy</a>. Our website is hosted
+          on Cloudflare, which processes basic request information to deliver the site.
+        </p>
+
+        <h2>We never sell your information</h2>
+        <p>
+          We do not sell, rent, or trade your personal information. We only share it with the service providers listed
+          above, which we use to run this website and our business, or if the law requires it.
+        </p>
+
+        <h2>How long we keep it</h2>
+        <p>[RETENTION PERIOD: how long you keep contact records before deleting them]</p>
+
+        <h2>Your choices</h2>
+        <p>
+          You can ask us to show you, correct, or delete the information we have about you, or to stop contacting you.
+          Email <a href={`mailto:${site.email}`}>{site.email}</a> and we’ll take care of it.
+        </p>
+
+        <h2>Changes to this policy</h2>
+        <p>If we change this policy, we’ll update it on this page and change the effective date above.</p>
+
+        <h2>Contact</h2>
+        <p>
+          {site.name}<br />
+          {site.mailingAddress.street}, {site.mailingAddress.city}, {site.mailingAddress.region} {site.mailingAddress.postalCode}<br />
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+      </article>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .effective { color: var(--ink-soft); margin-top: var(--s2); }
+  h1 { font-size: var(--step-3); }
+</style>

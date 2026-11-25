@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Base title="Page not found | Block and Site" description="This page doesn’t exist." noindex>
+  <Header />
+  <main id="main" class="section">
+    <div class="container">
+      <h1>This page doesn’t exist.</h1>
+      <p style="margin-block: 1.5rem 2rem">The link may be broken or the page may have moved.</p>
+      <a class="btn btn--primary" href="/">Go to the homepage</a>
+    </div>
+  </main>
+  <Footer />
+</Base>

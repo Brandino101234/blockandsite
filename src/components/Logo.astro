@@ -1,0 +1,34 @@
+---
+interface Props { onInk?: boolean }
+const { onInk = false } = Astro.props;
+---
+<a href="/" class:list={['logo', { 'logo--on-ink': onInk }]} aria-label="Block and Site, home">
+  <svg class="logo__mark" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+    <rect x="1" y="1" width="10" height="10" class="logo__stone" />
+    <rect x="13" y="1" width="10" height="10" fill="#FFC21A" stroke="#14213D" stroke-width="1.5" />
+    <rect x="1" y="13" width="10" height="10" class="logo__stone" />
+    <rect x="13" y="13" width="10" height="10" class="logo__stone" />
+  </svg>
+  <span class="logo__word">Block and Site</span>
+</a>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 44px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .logo__stone { fill: var(--ink); }
+  .logo--on-ink { color: var(--on-ink); }
+  .logo--on-ink .logo__stone { fill: var(--limestone); }
+  .logo__word {
+    font-weight: 800;
+    font-stretch: 122%;
+    font-size: 1.0625rem;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+</style>

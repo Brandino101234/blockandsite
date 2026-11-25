@@ -1,0 +1,66 @@
+---
+import Logo from './Logo.astro';
+import { site, isPlaceholder } from '../config/site';
+const a = site.mailingAddress;
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer on-ink">
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <Logo onInk />
+      <p>Fast, mobile-first websites for local businesses in Carmel and Fishers, Indiana.</p>
+    </div>
+    <div class="site-footer__col">
+      <h2 class="site-footer__heading">Contact</h2>
+      <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+      {!isPlaceholder(site.phone) && <p><a href={`tel:${site.phone}`}>{site.phone}</a></p>}
+    </div>
+    <div class="site-footer__col">
+      <h2 class="site-footer__heading">Mailing address</h2>
+      <address>
+        {a.street}<br />
+        {a.city}, {a.region} {a.postalCode}
+      </address>
+    </div>
+    <div class="site-footer__col">
+      <h2 class="site-footer__heading">Legal</h2>
+      <p><a href="/privacy">Privacy policy</a></p>
+    </div>
+  </div>
+  <div class="container site-footer__base">
+    <p>© {year} {site.name}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--ink);
+    color: var(--on-ink-muted);
+    padding-block: var(--s6) var(--s4);
+  }
+  .site-footer__inner {
+    display: grid;
+    gap: var(--s4);
+  }
+  @media (min-width: 760px) {
+    .site-footer__inner { grid-template-columns: 2fr 1.2fr 1.2fr 1fr; }
+  }
+  .site-footer__brand p { margin-top: var(--s2); max-width: 32ch; }
+  .site-footer__heading {
+    font-size: var(--step--1);
+    font-stretch: 110%;
+    font-weight: 700;
+    color: var(--on-ink);
+    margin-bottom: var(--s1);
+  }
+  .site-footer address { font-style: normal; }
+  .site-footer a { color: var(--on-ink); }
+  .site-footer a:focus-visible { outline-color: var(--signal); }
+  .site-footer__base {
+    margin-top: var(--s5);
+    padding-top: var(--s3);
+    border-top: 1px solid rgb(255 255 255 / 0.14);
+    font-size: var(--step--1);
+  }
+</style>

@@ -1,0 +1,145 @@
+---
+import { site } from '../config/site';
+---
+
+<section id="packages" class="section section--stone" aria-labelledby="packages-title">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="packages-title">Packages</h2>
+      <p>Three redesign packages, plus a monthly care plan so your site stays fast and working after launch. Every package is mobile-first, and you own your domain.</p>
+    </div>
+
+    <ul class="packages" role="list">
+      {
+        site.packages.map((pkg) => (
+          <li class="pkg">
+            <div class="pkg__stack" aria-hidden="true">
+              {Array.from({ length: pkg.blocks }).map((_, i) => (
+                <span class:list={['pkg__block', { 'pkg__block--top': i === 0 }]} />
+              ))}
+            </div>
+            <h3 class="pkg__name">{pkg.name}</h3>
+            <p class="pkg__price">{pkg.price}</p>
+            <p class="pkg__summary">{pkg.summary}</p>
+            <ul class="pkg__features">
+              {pkg.features.map((f) => <li>{f}</li>)}
+            </ul>
+            <a class="btn btn--secondary pkg__cta" href="#contact">
+              Get a free review<span class="visually-hidden"> about {pkg.name}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="care">
+      <div class="care__head">
+        <h3>Monthly care plan: {site.carePlan.name}</h3>
+        <p class="care__price">{site.carePlan.price} <span>per month</span></p>
+      </div>
+      <ul class="care__list" role="list">
+        {site.carePlan.includes.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .packages {
+    display: grid;
+    gap: var(--s3);
+    list-style: none;
+  }
+  @media (min-width: 860px) {
+    .packages { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
+  }
+  .pkg {
+    display: flex;
+    flex-direction: column;
+    padding: var(--s4) var(--s3);
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+  }
+  /* Block stack shows relative scope: 1, 2, or 3 blocks */
+  .pkg__stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 3px;
+    height: calc(3 * 18px + 2 * 3px);
+    margin-bottom: var(--s3);
+  }
+  .pkg__block {
+    width: 18px;
+    height: 18px;
+    background: var(--ink);
+  }
+  .pkg__block--top {
+    background: var(--signal);
+    box-shadow: inset 0 0 0 2px var(--ink);
+  }
+  .pkg__name { font-size: var(--step-2); }
+  .pkg__price {
+    margin-top: var(--s1);
+    font-size: var(--step-1);
+    font-weight: 700;
+    font-stretch: 110%;
+  }
+  .pkg__summary {
+    margin-top: var(--s2);
+    color: var(--ink-soft);
+  }
+  .pkg__features {
+    display: grid;
+    gap: var(--s1);
+    margin-block: var(--s3);
+    list-style: none;
+  }
+  .pkg__features li {
+    position: relative;
+    padding-left: 1.25rem;
+  }
+  .pkg__features li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 8px;
+    height: 8px;
+    background: var(--ink);
+  }
+  .pkg__cta { margin-top: auto; width: 100%; }
+
+  .care {
+    display: grid;
+    gap: var(--s3);
+    margin-top: var(--s3);
+    padding: var(--s4) var(--s3);
+    background: var(--ink);
+    color: var(--on-ink);
+    border-radius: var(--radius);
+  }
+  @media (min-width: 860px) {
+    .care { grid-template-columns: 1fr auto; align-items: center; padding-inline: var(--s4); }
+  }
+  .care__price {
+    margin-top: var(--s1);
+    font-weight: 700;
+    font-size: var(--step-1);
+    font-stretch: 110%;
+  }
+  .care__price span { font-weight: 400; color: var(--on-ink-muted); font-size: var(--step-0); }
+  .care__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s1);
+    list-style: none;
+  }
+  .care__list li {
+    padding: 0.5rem 0.875rem;
+    border: 1px solid rgb(255 255 255 / 0.3);
+    border-radius: var(--radius);
+    font-weight: 600;
+  }
+</style>

@@ -1,0 +1,188 @@
+---
+import Logo from './Logo.astro';
+const links = [
+  { href: '/#problems', label: 'What we fix' },
+  { href: '/#packages', label: 'Packages' },
+  { href: '/#work', label: 'Work' },
+  { href: '/#process', label: 'How it works' },
+  { href: '/#about', label: 'About' },
+];
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <Logo />
+    <nav class="site-nav" aria-label="Main">
+      <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-nav-list">
+        <span class="site-nav__bars" aria-hidden="true"></span>
+        Menu
+      </button>
+      <ul id="site-nav-list" class="site-nav__list">
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <a class="btn btn--primary btn--small site-header__cta" href="/#contact">Get a free review</a>
+  </div>
+</header>
+
+<!-- Phones: the CTA lives in a bar at the bottom of the screen, hidden while the form is on screen -->
+<div class="mobile-cta">
+  <a class="btn btn--primary" href="/#contact">Get a free website review</a>
+</div>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.site-nav__toggle');
+  const list = document.getElementById('site-nav-list');
+  const bar = document.querySelector<HTMLElement>('.mobile-cta');
+  // Hide the bar while the contact form or footer is on screen.
+  const targets = [document.getElementById('contact'), document.querySelector('.site-footer')].filter(Boolean) as Element[];
+  if (bar && targets.length && 'IntersectionObserver' in window) {
+    const visible = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
+      bar.classList.toggle('is-hidden', visible.size > 0);
+    });
+    targets.forEach((t) => io.observe(t));
+  }
+  if (toggle && list) {
+    const close = () => {
+      toggle.setAttribute('aria-expanded', 'false');
+      list.classList.remove('is-open');
+    };
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      list.classList.toggle('is-open', open);
+    });
+    list.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) close();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        close();
+        toggle.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(247 248 250 / 0.96);
+    border-bottom: var(--border);
+  }
+  @supports (backdrop-filter: blur(8px)) {
+    .site-header {
+      background: rgb(247 248 250 / 0.85);
+      backdrop-filter: blur(8px);
+    }
+  }
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--s2);
+    min-height: 4rem;
+  }
+  .site-nav {
+    margin-left: auto;
+  }
+  .site-nav__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0 0.75rem;
+    background: transparent;
+    border: 1px solid var(--limestone-deep);
+    border-radius: var(--radius);
+    color: var(--ink);
+    font: inherit;
+    font-weight: 600;
+    font-size: var(--step--1);
+    cursor: pointer;
+  }
+  .site-nav__bars,
+  .site-nav__bars::before,
+  .site-nav__bars::after {
+    display: block;
+    width: 16px;
+    height: 2px;
+    background: currentColor;
+  }
+  .site-nav__bars {
+    position: relative;
+  }
+  .site-nav__bars::before,
+  .site-nav__bars::after {
+    content: '';
+    position: absolute;
+    left: 0;
+  }
+  .site-nav__bars::before { top: -5px; }
+  .site-nav__bars::after { top: 5px; }
+
+  .site-nav__list {
+    display: none;
+    list-style: none;
+  }
+  .site-nav__list.is-open {
+    display: grid;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    padding: var(--s1) var(--gutter) var(--s2);
+    background: var(--paper);
+    border-bottom: var(--border);
+  }
+  .site-nav__list a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .site-nav__list a:hover {
+    color: var(--steel);
+  }
+  .site-header__cta {
+    flex: none;
+  }
+
+  .site-header__cta { display: none; }
+  .mobile-cta {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    padding: 0.75rem var(--gutter) calc(0.75rem + env(safe-area-inset-bottom));
+    background: rgb(247 248 250 / 0.97);
+    border-top: var(--border);
+    transition: transform 200ms var(--ease);
+  }
+  .mobile-cta .btn { width: 100%; box-shadow: 3px 3px 0 var(--ink); }
+  .mobile-cta.is-hidden { transform: translateY(110%); }
+  @media (min-width: 600px) {
+    .site-header__cta { display: inline-flex; }
+    .mobile-cta { display: none; }
+  }
+
+  @media (min-width: 960px) {
+    .site-nav__toggle { display: none; }
+    .site-nav__list,
+    .site-nav__list.is-open {
+      display: flex;
+      position: static;
+      gap: var(--s3);
+      padding: 0;
+      background: none;
+      border: 0;
+    }
+    .site-nav__list a { font-size: var(--step--1); }
+  }
+</style>

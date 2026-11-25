@@ -1,0 +1,91 @@
+---
+// A real sequence, so it's numbered. Each step adds a block: the site gets built up from the foundation.
+const steps = [
+  { title: 'Discovery call', body: 'We talk about your business, your customers, and what your current site is getting wrong.' },
+  { title: 'Mockup', body: 'We design how your new site will look so you can react to it before we build anything.' },
+  { title: 'Build', body: 'We build the full site: fast, mobile-first, and set up so customers can call or book.' },
+  { title: 'Preview approval', body: 'You review the finished site on a private preview link. Nothing goes live until you approve it.' },
+  { title: 'Launch', body: 'We put the site live on your domain, which you own. The code is transferred to you at final payment.' },
+  { title: 'Care plan', body: 'Our monthly care plan covers hosting, updates, and fixes so the site keeps working.' },
+];
+---
+
+<section id="process" class="section section--stone" aria-labelledby="process-title">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="process-title">How it works</h2>
+      <p>Six steps from first call to a site that keeps working.</p>
+    </div>
+    <ol class="steps" role="list">
+      {
+        steps.map((s, i) => (
+          <li class="step">
+            <div class="step__blocks" aria-hidden="true">
+              {Array.from({ length: i + 1 }).map((_, b) => (
+                <span class:list={['step__block', { 'step__block--new': b === i }]} />
+              ))}
+            </div>
+            <p class="step__num">Step {i + 1}</p>
+            <h3>{s.title}</h3>
+            <p class="step__body">{s.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps {
+    display: grid;
+    gap: var(--s4);
+    list-style: none;
+  }
+  @media (min-width: 640px) {
+    .steps { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1040px) {
+    .steps { grid-template-columns: repeat(6, 1fr); gap: var(--s3); align-items: end; }
+  }
+  .step {
+    display: grid;
+    align-content: start;
+    gap: var(--s1);
+  }
+  @media (min-width: 1040px) {
+    .step { align-content: end; height: 100%; }
+  }
+  .step__blocks {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    gap: 3px;
+    max-width: calc(3 * 14px + 2 * 3px);
+    margin-bottom: var(--s1);
+  }
+  @media (min-width: 1040px) {
+    .step__blocks {
+      flex-direction: column-reverse;
+      flex-wrap: nowrap;
+      max-width: none;
+    }
+  }
+  .step__block {
+    width: 14px;
+    height: 14px;
+    background: var(--ink);
+  }
+  @media (min-width: 1040px) {
+    .step__block { width: 100%; height: 12px; }
+  }
+  .step__block--new {
+    background: var(--signal);
+    box-shadow: inset 0 0 0 2px var(--ink);
+  }
+  .step__num {
+    font-weight: 700;
+    font-size: var(--step--1);
+    color: var(--steel);
+  }
+  .step h3 { font-size: 1.125rem; font-stretch: 110%; }
+  .step__body { color: var(--ink-soft); font-size: var(--step--1); line-height: 1.55; }
+</style>

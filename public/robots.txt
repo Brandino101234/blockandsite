@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# [DOMAIN] Update this URL when the real domain is set in src/config/site.ts
+Sitemap: https://blockandsite.example/sitemap-index.xml
