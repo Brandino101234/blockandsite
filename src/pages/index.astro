@@ -12,8 +12,6 @@ import Footer from '../components/Footer.astro';
 import { site, isPlaceholder } from '../config/site';
 import { absoluteUrl } from '../lib/paths';
 
-const a = site.mailingAddress;
-const addressReady = ![a.street, a.city, a.postalCode].some(isPlaceholder);
 
 // LocalBusiness schema. Only confirmed facts go here; placeholder fields are left out automatically.
 const localBusiness = {
@@ -27,9 +25,6 @@ const localBusiness = {
   logo: absoluteUrl('/brand/app-icon-512.png'),
   image: absoluteUrl('/og-image.png'),
   ...(isPlaceholder(site.phone) ? {} : { telephone: site.phone }),
-  ...(addressReady
-    ? { address: { '@type': 'PostalAddress', streetAddress: a.street, addressLocality: a.city, addressRegion: a.region, postalCode: a.postalCode, addressCountry: 'US' } }
-    : {}),
   areaServed: [
     { '@type': 'City', name: 'Carmel', containedInPlace: { '@type': 'State', name: 'Indiana' } },
     { '@type': 'City', name: 'Fishers', containedInPlace: { '@type': 'State', name: 'Indiana' } },

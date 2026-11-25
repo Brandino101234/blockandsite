@@ -11,12 +11,6 @@ export const site = {
   basePath: '/blockandsite',
   email: 'blockandsite@gmail.com',
   phone: '[PHONE]', // optional; leave in brackets to hide it everywhere
-  mailingAddress: {
-    street: '[STREET ADDRESS]',
-    city: '[CITY]',
-    region: 'IN',
-    postalCode: '[ZIP]',
-  },
   areaServed: ['Carmel, Indiana', 'Fishers, Indiana'],
   description:
     'Block and Site redesigns websites for local small businesses in Carmel and Fishers, Indiana: fast, mobile-first sites built to get calls and bookings.',
