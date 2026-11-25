@@ -35,6 +35,12 @@ Theme: pure black base; blue, red and yellow are the building blocks. Tokens are
 - Sentence case. No all-caps labels, no arrows on buttons. Numbered markers only for real sequences (the process).
 - The block motif carries meaning (package size, process steps); don't add decorative blocks elsewhere.
 
+### Logo
+
+- Mark: two overlapping rounded squares, blue (top left) and yellow (bottom right), with the overlap in red. Wordmark: "Block and Site" in Outfit 700, -0.02em.
+- Files in `public/brand/`: `logo-on-dark.svg` (white text), `logo-on-light.svg` (black text), `mark.svg`, `app-icon.svg` / `app-icon-512.png` (mark on a black tile). Wordmark text is outlined, so the files work without the font installed.
+- Regenerate with `tools/make-logo.py` instead of editing the SVG paths by hand. Don't recolor, rotate, stretch, or add effects to the mark.
+
 ## HubSpot
 
 - Custom form posts to `https://api.hsforms.com/submissions/v3/integration/submit/{PORTAL_ID}/{FORM_ID}` (`src/scripts/hubspot-form.ts`).

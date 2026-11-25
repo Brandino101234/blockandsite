@@ -15,6 +15,10 @@ npm run build     # outputs dist/
 - Build output directory: `dist`
 - Environment variable: `NODE_VERSION` = `22` (or newer)
 
+## Brand files
+
+Logo files live in `public/brand/` (SVG + PNG, for dark and light backgrounds, plus an app icon). After deploy they're also available at `/brand/...` on the live site.
+
 ## Before launch
 
 1. Fill every `[placeholder]`. Find them with `grep -rn "\[" src public --include=*.astro --include=*.ts --include=*.txt`.
