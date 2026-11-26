@@ -481,8 +481,8 @@ export function initHeroScene(canvas: HTMLCanvasElement, hero: HTMLElement, copy
     const c = copy.getBoundingClientRect();
     const cTop = c.top - r.top;
     const cBottom = c.bottom - r.top;
-    const wantW = narrow ? W * 0.94 : W * 0.5;
-    const maxH = narrow ? H * 0.52 : H * 0.8;
+    const wantW = narrow ? W * 1.2 : W * 0.5;
+    const maxH = narrow ? H * 0.62 : H * 0.8;
     scale = Math.min(wantW / (SPAN_W * ppu), maxH / (SPAN_H * ppu));
     const ax = narrow ? W * 0.5 : Math.max(W * 0.68, c.right - wantW * 0.18);
     const ay = narrow ? Math.min(H - (SPAN_H * scale * ppu) / 2 + 20, cBottom + 10) : H * 0.5;
