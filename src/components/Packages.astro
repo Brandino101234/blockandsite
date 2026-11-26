@@ -105,13 +105,25 @@ import { site } from '../config/site';
     flex-direction: column;
     justify-content: flex-end;
     gap: 4px;
-    height: calc(3 * 20px + 2 * 4px);
+    height: calc(3 * 24px + 2 * 4px);
     margin-bottom: var(--s3);
   }
   .pkg__block {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 3px;
+  }
+  /* The hero's blocks fly down and land here (src/scripts/follow-scene.ts) */
+  .pkg__block.is-waiting {
+    visibility: hidden;
+  }
+  .pkg__block.is-landed {
+    animation: land 420ms var(--ease);
+  }
+  @keyframes land {
+    0% { transform: scale(1.35); filter: brightness(1.6); }
+    60% { transform: scale(0.92); }
+    100% { transform: scale(1); filter: none; }
   }
   .pkg__block--blue { background: var(--blue); }
   .pkg__block--red { background: var(--red); }

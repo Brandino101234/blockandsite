@@ -29,8 +29,13 @@
 
   const start = () =>
     import('../scripts/hero-scene').then(({ initHeroScene }) => {
-      if (!hero || !canvas || !copy || !initHeroScene(canvas, hero, copy)) return;
+      if (!hero || !canvas || !copy) return;
+      const scene = initHeroScene(canvas, hero, copy);
+      if (!scene) return;
       requestAnimationFrame(() => hero.classList.add('is-live'));
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        import('../scripts/follow-scene').then(({ initFollow }) => initFollow(scene, hero));
+      }
       if (hint && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
         hint.textContent = matchMedia('(pointer: fine)').matches
           ? 'Drag to spin the blocks. Click to rebuild them.'

@@ -271,10 +271,11 @@ uniform vec2 uFog;
 uniform vec4 uRect;
 uniform float uSoft;
 uniform float uDim;
+uniform float uOrtho;
 out vec4 outColor;
 void main() {
   vec3 N = normalize(vNormal);
-  vec3 V = normalize(vec3(0., 0., uCamZ) - vWorld);
+  vec3 V = uOrtho > .5 ? vec3(0., 0., 1.) : normalize(vec3(0., 0., uCamZ) - vWorld);
   vec3 L = normalize(vec3(-.45, .75, .6));
   float diff = max(dot(N, L), 0.);
   float fill = max(dot(N, normalize(vec3(.7, -.35, .4))), 0.);
@@ -285,7 +286,7 @@ void main() {
   float mn = min(min(d.x, d.y), d.z);
   float mx = max(max(d.x, d.y), d.z);
   float mid = d.x + d.y + d.z - mn - mx;
-  float edge = 1. - smoothstep(.0, .05, mid);
+  float edge = 1. - smoothstep(.0, .11 * min(min(vHalf.x, vHalf.y), vHalf.z), mid);
   vec3 col = vColor * (.22 + .9 * diff + .18 * fill) + vColor * rim * .45 + spec * .3 + edge * (.12 + .25 * diff);
   float fog = smoothstep(uFog.x, uFog.y, distance(vec3(0., 0., uCamZ), vWorld));
   col = mix(col, vec3(0.), fog);
@@ -331,37 +332,26 @@ function compile(gl: WebGL2RenderingContext, type: number, src: string) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Scene
+// Shared cube renderer (used by the hero scene and by the blocks that follow you down the page)
 // ---------------------------------------------------------------------------------------------
 
-export function initHeroScene(canvas: HTMLCanvasElement, hero: HTMLElement, copy: HTMLElement): boolean {
+export function createCubeRenderer(canvas: HTMLCanvasElement, maxN: number) {
   const gl = canvas.getContext('webgl2', { antialias: true, alpha: true, premultipliedAlpha: true, powerPreference: 'low-power' });
-  if (!gl) return false;
-
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
+  if (!gl) return null;
   let prog: WebGLProgram;
   try {
     prog = gl.createProgram()!;
     gl.attachShader(prog, compile(gl, gl.VERTEX_SHADER, VERT));
     gl.attachShader(prog, compile(gl, gl.FRAGMENT_SHADER, FRAG));
     gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return false;
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return null;
   } catch {
-    return false;
+    return null;
   }
   gl.useProgram(prog);
   const u = (n: string) => gl.getUniformLocation(prog, n);
-  const uProj = u('uProj');
-  const uModel = u('uModel');
-  const uCamZ = u('uCamZ');
-  const uFog = u('uFog');
-  const uRect = u('uRect');
-  const uSoft = u('uSoft');
-  const uDim = u('uDim');
 
-  const vao = gl.createVertexArray();
-  gl.bindVertexArray(vao);
+  gl.bindVertexArray(gl.createVertexArray());
   const geo = cubeGeometry();
   gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
   gl.bufferData(gl.ARRAY_BUFFER, geo.data, gl.STATIC_DRAW);
@@ -372,7 +362,7 @@ export function initHeroScene(canvas: HTMLCanvasElement, hero: HTMLElement, copy
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gl.createBuffer());
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, geo.idx, gl.STATIC_DRAW);
 
-  const inst = new Float32Array(N * 12);
+  const inst = new Float32Array(maxN * 12);
   const instBuf = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, instBuf);
   gl.bufferData(gl.ARRAY_BUFFER, inst.byteLength, gl.DYNAMIC_DRAW);
@@ -384,6 +374,40 @@ export function initHeroScene(canvas: HTMLCanvasElement, hero: HTMLElement, copy
   gl.enable(gl.DEPTH_TEST);
   gl.enable(gl.CULL_FACE);
   gl.clearColor(0, 0, 0, 0);
+  gl.uniform1f(u('uOrtho'), 0);
+  return {
+    gl,
+    inst,
+    instBuf,
+    u: {
+      uProj: u('uProj'),
+      uModel: u('uModel'),
+      uCamZ: u('uCamZ'),
+      uFog: u('uFog'),
+      uRect: u('uRect'),
+      uSoft: u('uSoft'),
+      uDim: u('uDim'),
+      uOrtho: u('uOrtho'),
+    },
+  };
+}
+
+export interface HeroSceneApi {
+  /** Where block i is on screen right now (viewport px), its size in px and its color. */
+  blockScreen(i: number): { x: number; y: number; size: number; color: RGB };
+  setHidden(i: number, hidden: boolean): void;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Scene
+// ---------------------------------------------------------------------------------------------
+
+export function initHeroScene(canvas: HTMLCanvasElement, hero: HTMLElement, copy: HTMLElement): HeroSceneApi | null {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const r0 = createCubeRenderer(canvas, N);
+  if (!r0) return null;
+  const { gl, inst, instBuf } = r0;
+  const { uProj, uModel, uCamZ, uFog, uRect, uSoft, uDim } = r0.u;
 
   // Per-block simulation state
   const pos = new Float32Array(N * 3);
@@ -396,6 +420,7 @@ export function initHeroScene(canvas: HTMLCanvasElement, hero: HTMLElement, copy
   const follow = new Int8Array(N); // formation each block is currently heading to
   const perms: Int16Array[] = FORMATIONS.map(() => new Int16Array(N));
   const tgt = new Float32Array(12);
+  const hidden = new Uint8Array(N);
 
   const shuffle = (p: Int16Array) => {
     for (let i = 0; i < N; i++) p[i] = i;
@@ -654,7 +679,8 @@ export function initHeroScene(canvas: HTMLCanvasElement, hero: HTMLElement, copy
       const o = i * 12, s = i * 3;
       inst[o] = pos[s]; inst[o + 1] = pos[s + 1]; inst[o + 2] = pos[s + 2];
       inst[o + 3] = rot[s]; inst[o + 4] = rot[s + 1]; inst[o + 5] = rot[s + 2];
-      inst[o + 6] = scl[s]; inst[o + 7] = scl[s + 1]; inst[o + 8] = scl[s + 2];
+      const h = hidden[i] ? 0 : 1;
+      inst[o + 6] = scl[s] * h; inst[o + 7] = scl[s + 1] * h; inst[o + 8] = scl[s + 2] * h;
       inst[o + 9] = col[s]; inst[o + 10] = col[s + 1]; inst[o + 11] = col[s + 2];
     }
     gl.bindBuffer(gl.ARRAY_BUFFER, instBuf);
@@ -664,17 +690,38 @@ export function initHeroScene(canvas: HTMLCanvasElement, hero: HTMLElement, copy
     gl.drawElementsInstanced(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0, N);
   };
 
+  const api: HeroSceneApi = {
+    blockScreen(i) {
+      const r = hero.getBoundingClientRect();
+      const [X, Y] = project(i);
+      const z = scale * (R[6] * pos[i * 3] + R[7] * pos[i * 3 + 1] + R[8] * pos[i * 3 + 2]);
+      const k = camZ / Math.max(1, camZ - z);
+      return {
+        x: r.left + W / 2 + X * ppu,
+        y: r.top + H / 2 - Y * ppu,
+        size: ((scl[i * 3] + scl[i * 3 + 1]) / 2) * scale * ppu * k,
+        color: [col[i * 3], col[i * 3 + 1], col[i * 3 + 2]],
+      };
+    },
+    setHidden(i, h) {
+      hidden[i] = h ? 1 : 0;
+      if (reducedDraw) reducedDraw();
+    },
+  };
+  let reducedDraw: (() => void) | null = null;
+
   layout();
 
   if (reduced) {
     settle();
     draw();
+    reducedDraw = draw;
     new ResizeObserver(() => {
       layout();
       updateModel();
       draw();
     }).observe(hero);
-    return true;
+    return api;
   }
 
   // ---- input ----
@@ -772,5 +819,5 @@ export function initHeroScene(canvas: HTMLCanvasElement, hero: HTMLElement, copy
   new ResizeObserver(layout).observe(hero);
 
   resume();
-  return true;
+  return api;
 }

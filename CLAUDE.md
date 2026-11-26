@@ -17,7 +17,7 @@ Marketing site for Block and Site, a two-partner web design studio (Brendan Nuss
 - No UI frameworks or component libraries. Astro components + plain CSS + small vanilla TS scripts only.
 - One self-hosted font file (`src/assets/fonts/outfit.woff2`, bundled by Vite so it works under any base path). Don't add Google Fonts links or more font files.
 - Images: use real photos only, compressed WebP/AVIF, with explicit `width`/`height` and `loading="lazy"` below the fold.
-- The hero's WebGL block scene (`src/scripts/hero-scene.ts`, no libraries) starts on first interaction or after 3.5s so it never counts against first load. Keep it library-free; shapes are ASCII maps in that file.
+- The hero's WebGL block scene (`src/scripts/hero-scene.ts`, no libraries) starts on first interaction or after 3.5s so it never counts against first load. Keep it library-free; shapes are ASCII maps in that file. As you scroll, six of its blocks fly down and land as the package stacks (`src/scripts/follow-scene.ts`); the stacks stay visible as plain blocks when the scene doesn't run (no WebGL, reduced motion).
 - Third-party scripts load after page load (see the HubSpot loader in `src/layouts/Base.astro`). Don't add new ones without a reason.
 
 ## Accessibility rules
