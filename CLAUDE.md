@@ -17,6 +17,7 @@ Marketing site for Block and Site, a two-partner web design studio (Brendan Nuss
 - No UI frameworks or component libraries. Astro components + plain CSS + small vanilla TS scripts only.
 - One self-hosted font file (`src/assets/fonts/outfit.woff2`, bundled by Vite so it works under any base path). Don't add Google Fonts links or more font files.
 - Images: use real photos only, compressed WebP/AVIF, with explicit `width`/`height` and `loading="lazy"` below the fold.
+- The hero's WebGL block scene (`src/scripts/hero-scene.ts`, no libraries) starts on first interaction or after 3.5s so it never counts against first load. Keep it library-free; shapes are ASCII maps in that file.
 - Third-party scripts load after page load (see the HubSpot loader in `src/layouts/Base.astro`). Don't add new ones without a reason.
 
 ## Accessibility rules
@@ -34,7 +35,7 @@ Theme: pure black base; blue, red and yellow are the building blocks. Tokens are
 - Form errors use the softer `#FF9A9E`, not brand red. Focus rings are yellow.
 - Outfit for everything: headings 700 with -0.03em tracking, body 400.
 - Sentence case. No all-caps labels, no arrows on buttons. Numbered markers only for real sequences (the process).
-- The block motif carries meaning (package size, process steps); don't add decorative blocks elsewhere.
+- The block motif carries meaning (package size, process steps, the hero's blocks building a site); don't add decorative blocks elsewhere.
 
 ### Logo
 

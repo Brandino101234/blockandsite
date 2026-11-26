@@ -2,6 +2,9 @@
 ---
 
 <section class="hero" aria-labelledby="hero-title">
+  <!-- Signature visual: blocks that keep rebuilding into a website, the logo, a phone, a wave and a vortex,
+       behind the headline. WebGL, loaded after the page is ready (src/scripts/hero-scene.ts). -->
+  <canvas class="hero__canvas" aria-hidden="true"></canvas>
   <div class="container hero__inner">
     <div class="hero__copy">
       <h1 id="hero-title">Websites that get local businesses more calls.</h1>
@@ -14,88 +17,88 @@
         <a class="hero__link" href="#packages">See packages</a>
       </div>
     </div>
-
-    <!-- Signature visual: a phone-sized site built from blocks, shown in 3D. Blocks float off the screen at
-         different depths; three cubes (the logo colors) orbit it. Pure CSS 3D, tilts with the pointer. -->
-    <div class="hero__art" aria-hidden="true">
-      <div class="rig-sway">
-      <div class="rig">
-      <div class="cube" style="--s:46px; --x:-20%; --y:10%; --z:90px; --c:var(--blue); --d:16s; --fd:4.5s"><div class="cube__spin"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-      <div class="cube" style="--s:32px; --x:92%; --y:2%; --z:60px; --c:var(--yellow); --d:12s; --fd:3.8s"><div class="cube__spin"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-      <div class="cube" style="--s:40px; --x:86%; --y:72%; --z:120px; --c:var(--red); --d:20s; --fd:5.2s"><div class="cube__spin"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-      <div class="phone">
-        <div class="phone__screen">
-          <div class="blk blk--nav" style="--i:0; --z:18px"><span></span><span></span><span></span></div>
-          <div class="blk blk--banner" style="--i:1; --z:8px"></div>
-          <div class="blk blk--line" style="--i:2; --z:4px"></div>
-          <div class="blk blk--line blk--short" style="--i:3; --z:4px"></div>
-          <div class="blk blk--call" style="--i:4; --z:46px">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
-            Call now
-          </div>
-          <div class="blk-row" style="--i:5; --z:30px"><div class="blk blk--tile blk--yellow"></div><div class="blk blk--tile blk--red"></div></div>
-          <div class="blk blk--line" style="--i:6; --z:4px"></div>
-          <div class="blk blk--line blk--short" style="--i:7; --z:4px"></div>
-          <div class="blk blk--footer" style="--i:8; --z:12px"></div>
-        </div>
-      </div>
-      </div>
-      </div>
-    </div>
   </div>
+  <p class="hero__hint" aria-hidden="true" hidden></p>
 </section>
 
 <script>
-  // Tilt the 3D scene toward the pointer (mouse/trackpad only; skipped for reduced motion), and pause
-  // the idle animations while the hero is off screen.
   const hero = document.querySelector<HTMLElement>('.hero');
-  const rig = document.querySelector<HTMLElement>('.rig');
-  if (hero && rig) {
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!reduced && matchMedia('(pointer: fine)').matches) {
-      let frame = 0;
-      hero.addEventListener('pointermove', (e) => {
-        const r = hero.getBoundingClientRect();
-        const dx = (e.clientX - r.left) / r.width - 0.5;
-        const dy = (e.clientY - r.top) / r.height - 0.5;
-        cancelAnimationFrame(frame);
-        frame = requestAnimationFrame(() => {
-          rig.style.setProperty('--ry', `${(dx * 24).toFixed(2)}deg`);
-          rig.style.setProperty('--rx', `${(-dy * 16).toFixed(2)}deg`);
-        });
-      });
-      hero.addEventListener('pointerleave', () => {
-        rig.style.setProperty('--ry', '0deg');
-        rig.style.setProperty('--rx', '0deg');
-      });
-    }
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(([entry]) => hero.classList.toggle('is-offscreen', !entry.isIntersecting)).observe(hero);
-    }
-  }
+  const canvas = document.querySelector<HTMLCanvasElement>('.hero__canvas');
+  const copy = document.querySelector<HTMLElement>('.hero__copy');
+  const hint = document.querySelector<HTMLElement>('.hero__hint');
+
+  const start = () =>
+    import('../scripts/hero-scene').then(({ initHeroScene }) => {
+      if (!hero || !canvas || !copy || !initHeroScene(canvas, hero, copy)) return;
+      requestAnimationFrame(() => hero.classList.add('is-live'));
+      if (hint && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        hint.textContent = matchMedia('(pointer: fine)').matches
+          ? 'Drag to spin the blocks. Click to rebuild them.'
+          : 'Tap to rebuild the blocks.';
+        hint.hidden = false;
+      }
+    });
+
+  // Start on the visitor's first interaction (or after a few seconds) so the scene never competes with
+  // the page's first load.
+  let started = false;
+  const events = ['pointermove', 'pointerdown', 'touchstart', 'scroll', 'keydown'] as const;
+  const go = () => {
+    if (started) return;
+    started = true;
+    events.forEach((e) => removeEventListener(e, go));
+    start();
+  };
+  const arm = () => {
+    events.forEach((e) => addEventListener(e, go, { once: true, passive: true }));
+    setTimeout(go, 3500);
+  };
+  if (document.readyState === 'complete') arm();
+  else addEventListener('load', arm, { once: true });
 </script>
 
 <style>
   .hero {
     position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(600px, calc(100svh - 72px), 900px);
     /* faint blueprint grid on the 8px system */
     background-image:
       linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
       linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
     background-size: 32px 32px;
     overflow: hidden;
+    touch-action: pan-y;
+  }
+  .hero__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 900ms var(--ease);
+  }
+  .hero.is-live .hero__canvas {
+    opacity: 1;
+  }
+  .hero.is-live {
+    cursor: grab;
+  }
+  .hero.is-live:active {
+    cursor: grabbing;
   }
   .hero__inner {
-    display: grid;
-    gap: var(--s5);
+    position: relative;
+    z-index: 1;
     padding-block: var(--s6);
+    pointer-events: none;
   }
-  @media (min-width: 900px) {
-    .hero__inner {
-      grid-template-columns: 1.35fr 1fr;
-      align-items: center;
-      padding-block: var(--s7);
-    }
+  .hero__copy {
+    max-width: 40rem;
+    pointer-events: auto;
+    cursor: auto;
+    text-shadow: 0 2px 28px rgb(0 0 0 / 0.85);
   }
   .hero h1 {
     max-width: 14ch;
@@ -121,211 +124,34 @@
     display: inline-flex;
     align-items: center;
   }
-  .hero__link:hover { color: var(--blue); }
-
-  /* ---- Phone built from blocks ---- */
-  .hero__art {
-    display: flex;
-    justify-content: center;
+  .hero__link:hover {
+    color: var(--blue);
   }
-  .phone {
-    position: relative;
-    transform-style: preserve-3d;
-    width: min(68vw, 260px);
-    aspect-ratio: 9 / 17;
-    padding: 12px;
-    border: 2px solid var(--line-strong);
-    border-radius: 22px;
-    background: var(--surface);
-  }
-  .phone__screen {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    height: 100%;
-    padding: 10px;
-    border-radius: 12px;
-    background: #f5f5f5;
-    transform-style: preserve-3d;
-  }
-  .blk,
-  .blk-row {
-    animation: snap 520ms var(--ease) both;
-    animation-delay: calc(120ms + var(--i, 0) * 70ms);
-  }
-  .blk-row .blk { animation: none; }
-  .blk {
-    border-radius: var(--radius-block);
-    background: #dedede;
-  }
-  .blk--nav {
-    display: flex;
-    gap: 6px;
-    padding: 6px;
-    background: var(--bg);
-  }
-  .blk--nav span {
-    width: 14px;
-    height: 6px;
-    border-radius: 2px;
-    background: var(--line-strong);
-  }
-  .blk--nav span:first-child { width: 22px; background: var(--red); }
-  .blk--banner { flex: 0 0 34%; background: #cccccc; }
-  .blk--line { height: 10px; }
-  .blk--short { width: 62%; }
-  .blk--call {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    min-height: 40px;
-    margin-block: 4px;
-    background: var(--blue);
-    color: var(--on-accent);
-    font-weight: 700;
+  .hero__hint {
+    position: absolute;
+    right: var(--gutter);
+    bottom: var(--s3);
+    z-index: 1;
+    margin: 0;
+    color: var(--text-muted);
     font-size: 0.875rem;
-  }
-  .blk-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    flex: 1 1 auto;
-    max-height: 72px;
-  }
-  .blk--yellow { background: var(--yellow); }
-  .blk--red { background: var(--red); }
-  .blk--footer { margin-top: auto; height: 28px; background: var(--bg); }
-
-  /* ---- 3D scene ---- */
-  .hero__art {
-    perspective: 1100px;
-    perspective-origin: 50% 40%;
-  }
-  .rig-sway {
-    transform-style: preserve-3d;
-    animation: sway 9s ease-in-out infinite alternate;
-  }
-  .rig {
-    position: relative;
-    transform-style: preserve-3d;
-    transform: rotateX(calc(6deg + var(--rx, 0deg))) rotateY(calc(-18deg + var(--ry, 0deg)));
-    transition: transform 500ms var(--ease);
-  }
-  /* Blocks lift off the screen to their own depth (individual translate composes with the snap animation) */
-  .blk,
-  .blk-row {
-    translate: 0 0 var(--z, 0px);
-    transform-style: preserve-3d;
-  }
-  .blk--nav,
-  .blk--call,
-  .blk-row .blk {
-    box-shadow: 0 12px 20px rgb(0 0 0 / 0.28);
+    pointer-events: none;
+    user-select: none;
   }
 
-  .cube {
-    position: absolute;
-    left: var(--x);
-    top: var(--y);
-    width: var(--s);
-    height: var(--s);
-    transform-style: preserve-3d;
-    transform: translateZ(var(--z));
-    animation: float var(--fd) ease-in-out infinite alternate;
-  }
-  .cube__spin {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    animation: spin var(--d) linear infinite;
-  }
-  .cube__spin i {
-    position: absolute;
-    inset: 0;
-    border-radius: 4px;
-    background: var(--c);
-    backface-visibility: hidden;
-  }
-  .cube__spin i:nth-child(1) { transform: translateZ(calc(var(--s) / 2)); }
-  .cube__spin i:nth-child(2) { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
-  .cube__spin i:nth-child(3) { transform: rotateY(90deg) translateZ(calc(var(--s) / 2)); }
-  .cube__spin i:nth-child(4) { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
-  .cube__spin i:nth-child(5) { transform: rotateX(90deg) translateZ(calc(var(--s) / 2)); }
-  .cube__spin i:nth-child(6) { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); }
-  /* Simple shading so the cubes read as solid: sides darker, top/bottom lighter */
-  .cube__spin i:nth-child(3),
-  .cube__spin i:nth-child(4) { background-image: linear-gradient(rgb(0 0 0 / 0.22), rgb(0 0 0 / 0.22)); }
-  .cube__spin i:nth-child(5),
-  .cube__spin i:nth-child(6) { background-image: linear-gradient(rgb(255 255 255 / 0.25), rgb(255 255 255 / 0.25)); }
-
-  /* Narrow screens: lay the phone back like it's on a table so the blocks rise toward the viewer.
-     Same 3D idea at roughly half the height. Transforms don't change layout size, so the art box
-     gets a fixed height and the scene is centered inside it. */
+  /* Narrow screens: text on top, the blocks build in the space below it and rise up behind the buttons. */
   @media (max-width: 899px) {
+    .hero {
+      align-items: flex-start;
+      min-height: 0;
+    }
     .hero__inner {
-      gap: var(--s2);
-      padding-block: var(--s5) var(--s3);
+      padding-block: var(--s5) clamp(260px, 72vw, 340px);
     }
-    .hero__art {
-      height: 240px;
-      margin-top: var(--s3);
-      align-items: center;
-      perspective: 800px;
-      perspective-origin: 50% 20%;
-    }
-    .phone {
-      width: 150px;
-      padding: 8px;
-      border-radius: 16px;
-    }
-    .phone__screen {
-      gap: 5px;
-      padding: 7px;
-    }
-    .blk--call {
-      min-height: 26px;
-      font-size: 0.6875rem;
-    }
-    .blk--call svg { width: 11px; height: 11px; }
-    .blk-row { flex: 0 0 34px; gap: 5px; }
-    .hero__actions { gap: var(--s2) var(--s3); margin-top: var(--s3); }
-    .rig {
-      transform: rotateX(calc(52deg + var(--rx, 0deg))) rotateZ(-30deg) rotateY(var(--ry, 0deg));
-    }
-    .cube { --s: 26px !important; }
-  }
-
-  .hero.is-offscreen .rig-sway,
-  .hero.is-offscreen .cube,
-  .hero.is-offscreen .cube__spin { animation-play-state: paused; }
-
-  @keyframes sway {
-    from { transform: rotateY(-7deg) translateY(0); }
-    to { transform: rotateY(7deg) translateY(-6px); }
-  }
-  @keyframes spin {
-    from { transform: rotateX(-24deg) rotateY(0deg); }
-    to { transform: rotateX(-24deg) rotateY(360deg); }
-  }
-  @keyframes float {
-    from { transform: translateZ(var(--z)) translateY(-8px); }
-    to { transform: translateZ(var(--z)) translateY(8px); }
-  }
-
-  @keyframes snap {
-    from {
-      opacity: 0;
-      transform: translateY(-18px);
-    }
-    70% {
-      opacity: 1;
-      transform: translateY(2px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+    .hero__hint {
+      left: var(--gutter);
+      right: auto;
+      bottom: var(--s2);
     }
   }
 </style>
